@@ -29,14 +29,14 @@ public class Field_ArenaAuthConfiguration {
             .logoutSuccessUrl("/")) // ログアウト後に / にリダイレクト
         .authorizeHttpRequests(authz -> authz
             .requestMatchers(AntPathRequestMatcher.antMatcher("/gamearea/**"))
-            .authenticated() // /sample3/以下は認証済みであること
+            .authenticated() 
             .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
-            .permitAll());// 上記以外は全員アクセス可能
-        // .csrf(csrf -> csrf
-            // .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/*")))// h2-console用にCSRF対策を無効化
-        // .headers(headers -> headers
-        //     .frameOptions(frameOptions -> frameOptions
-        //         .sameOrigin()));
+            .permitAll())// 上記以外は全員アクセス可能
+            .csrf(csrf -> csrf
+            .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/*")))// h2-console用にCSRF対策を無効化
+        .headers(headers -> headers
+            .frameOptions(frameOptions -> frameOptions
+                .sameOrigin()));
     return http.build();
   }
 
@@ -72,7 +72,7 @@ public class Field_ArenaAuthConfiguration {
         .build();
     // $ sshrun htpasswd -nbBC 10 seller p@ss
     UserDetails seller = User.withUsername("seller")
-        .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S")
+        .password("{bcrypt}$2y$10$ngxCDmuVK1TaGchiYQfJ1OAKkd64IH6skGsNw1sLabrTICOHPxC0e")
         .roles("SELLER")
         .build();
 
