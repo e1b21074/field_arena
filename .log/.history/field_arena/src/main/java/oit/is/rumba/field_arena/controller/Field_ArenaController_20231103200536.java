@@ -17,7 +17,7 @@ public class Field_ArenaController {
  @GetMapping("logininfo")
   public String sample32(ModelMap model, Principal prin) {
     String loginUser = prin.getName();
-    model.addAttribute("loginUser", loginUser);
+    model.addAttribute("loginuser", loginUser);
     return "gamearea.html";
   }
 }

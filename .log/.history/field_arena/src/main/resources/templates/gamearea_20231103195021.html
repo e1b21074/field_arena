@@ -6,10 +6,9 @@
     <title>カードゲーム</title>
 </head>
 <body>
-    <h1>ようこそ！</h1>
-    <h2>ユーザー名：[[${loginUser}]]</h2>
+    <p>ようこそ！</p>
     <ul>
-        <a href="logininfo">ログインユーザ情報名を表示</a>
+        <li th:each="user : ${loginUser}">[[${user}]]</li>
     </ul>
 </body>
 </html>

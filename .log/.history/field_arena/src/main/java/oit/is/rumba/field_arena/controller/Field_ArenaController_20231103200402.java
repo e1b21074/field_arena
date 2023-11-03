@@ -5,6 +5,7 @@ import java.security.Principal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 
 @Controller
 public class Field_ArenaController {
@@ -14,10 +15,10 @@ public class Field_ArenaController {
     return "gamearea.html";
   }
 
- @GetMapping("logininfo")
+ @GetMapping("login")
   public String sample32(ModelMap model, Principal prin) {
-    String loginUser = prin.getName();
-    model.addAttribute("loginUser", loginUser);
+    String loginUser = prin.getName(); // ログインユーザ情報
+    model.addAttribute("loginuser", loginUser);
     return "gamearea.html";
   }
 }
