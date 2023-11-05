@@ -1,7 +1,6 @@
 package oit.is.rumba.field_arena.controller;
 
 import java.security.Principal;
-import java.util.Random;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,4 +20,7 @@ public class Field_ArenaController {
     model.addAttribute("loginUser", loginUser);
     return "gamearea.html";
   }
+
+  @GetMapping("drawcard")
+  public String drawCard
 }

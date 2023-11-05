@@ -21,4 +21,12 @@ public class Field_ArenaController {
     model.addAttribute("loginUser", loginUser);
     return "gamearea.html";
   }
+
+  @GetMapping("drawcard")
+  public String drawCard(ModelMap model, Principal prin){
+    Random r = new Random();
+    String deck[] = {"攻撃1","攻撃2","攻撃3","防御1","防御2","防御3"};
+    String getCard = deck[r.nextInt(6)];
+    return getCard;
+  }
 }

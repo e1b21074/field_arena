@@ -1,7 +1,6 @@
 package oit.is.rumba.field_arena.controller;
 
 import java.security.Principal;
-import java.util.Random;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,7 +15,7 @@ public class Field_ArenaController {
   }
 
  @GetMapping("logininfo")
-  public String loginInfo(ModelMap model, Principal prin) {
+  public String sample32(ModelMap model, Principal prin) {
     String loginUser = prin.getName();
     model.addAttribute("loginUser", loginUser);
     return "gamearea.html";

@@ -21,4 +21,5 @@ public class Field_ArenaController {
     model.addAttribute("loginUser", loginUser);
     return "gamearea.html";
   }
+
 }
