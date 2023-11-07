@@ -11,5 +11,15 @@
     <ul>
         <a href="logininfo">ログインユーザ情報名を表示</a>
     </ul>
+
+
+    <div>
+      <a href="/User">ユーザの表示</a>
+      <ul>
+        <li th:each="user : ${users}">
+          [[${user.userName}]]
+        </li>
+      </ul>
+    </div>
 </body>
 </html>
