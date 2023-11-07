@@ -17,6 +17,11 @@ public class Field_ArenaController {
   @Autowired
   UserMapper userMapper;
 
+  @Autowired
+  CardMapper cardMapper;
+
+  Draw player = new Draw();
+
   @GetMapping("/gamearea")
   public String gamearea() {
     return "gamearea.html";
@@ -34,6 +39,30 @@ public class Field_ArenaController {
     ArrayList<User> users = userMapper.selectAllUsers();
     model.addAttribute("users", users);
     return "gamearea.html";
+  }
+
+  @GetMapping("/game")
+  public String game(ModelMap model) {
+    ArrayList<Card> cards = cardMapper.selectAllCards();
+    ArrayList<Card> hand = new ArrayList<Card>();
+    this.player = new Draw();
+    for (int i = 0; i < 5; i++) {
+      hand.add(this.player.getHand(cards));
+    }
+    this.player.setHandList(hand);
+    model.addAttribute("hand", hand);
+    return "game.html";
+  }
+
+  @GetMapping("/draw")
+  public String draw(ModelMap model) {
+    ArrayList<Card> cards = cardMapper.selectAllCards();
+    ArrayList<Card> hand = new ArrayList<Card>();
+    hand = this.player.getHandList();
+    hand.add(this.player.getHand(cards));
+    this.player.setHandList(hand);
+    model.addAttribute("hand", hand);
+    return "game.html";
   }
 
 }

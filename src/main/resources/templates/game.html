@@ -7,17 +7,18 @@
 </head>
 <body>
     <h1>ようこそ！</h1>
-    <h2>ユーザー名：<a sec:authentication="name"></a></h2>
+    <h2>カードドロー</h2>
 
     <div>
-      <button onclick="location.href='/User'">ユーザの表示</button>
       <ul>
-        <li th:each="user : ${users}">
-          [[${user.userName}]]
+        <li th:each="hand : ${hand}">
+          カード属性:[[${hand.cardAttribute}]] 強さ:[[${hand.cardStrong}]]
         </li>
       </ul>
     </div>
 
+    <button onclick="location.href='/draw'">ドロー</button>
+    <button onclick="location.href='/gamearea'">戻る</button>
     <button onclick="location.href='/logout'">ログアウト</button>
 </body>
 </html>
