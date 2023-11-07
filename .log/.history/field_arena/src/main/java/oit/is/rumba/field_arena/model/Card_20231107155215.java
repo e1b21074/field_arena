@@ -2,7 +2,7 @@ package oit.is.rumba.field_arena.model;
 
 public class Card {
   int id;
-  String cardAttribute;
+  int cardAttribute;
   int cardStrong;
 
   public int getId() {
@@ -13,11 +13,11 @@ public class Card {
     this.id = id;
   }
 
-  public String getCardAttribute() {
+  public int getCardAttribute() {
     return cardAttribute;
   }
 
-  public void setCardAttribute(String cardAttribute) {
+  public void setCardAttribute(int cardAttribute) {
     this.cardAttribute = cardAttribute;
   }
 

@@ -27,7 +27,7 @@
     <button onclick="location.href='/Card'">カードの表示</button>
     <ul>
       <li th:each="card : ${cards}">
-        カード属性:[[${card.cardAttribute}]] 強さ:[[${card.cardStrong}]]
+        カード属性:${Attribute(card.cardAttribute)} 強さ:[[${card.cardStrong}]]
       </li>
     </ul>
   </div>
