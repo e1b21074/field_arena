@@ -17,17 +17,17 @@ public class Field_ArenaController {
   @Autowired
   UserMapper userMapper;
 
-    @GetMapping("/gamearea")
+  @GetMapping("/gamearea")
   public String gamearea() {
     return "gamearea.html";
   }
 
- @GetMapping("logininfo")
- public String loginInfo(ModelMap model, Principal prin) {
-   String loginUser = prin.getName();
-   model.addAttribute("loginUser", loginUser);
-   return "gamearea.html";
- }
+  @GetMapping("logininfo")
+  public String loginInfo(ModelMap model, Principal prin) {
+    String loginUser = prin.getName();
+    model.addAttribute("loginUser", loginUser);
+    return "gamearea.html";
+  }
 
   @GetMapping("/User")
   public String User(ModelMap model) {
@@ -35,4 +35,5 @@ public class Field_ArenaController {
     model.addAttribute("users", users);
     return "gamearea.html";
   }
+
 }
