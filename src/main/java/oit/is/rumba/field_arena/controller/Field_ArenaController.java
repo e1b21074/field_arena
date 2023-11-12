@@ -12,8 +12,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import oit.is.rumba.field_arena.model.*;
+import oit.is.rumba.field_arena.service.*;
 
 @Controller
 public class Field_ArenaController {
@@ -26,6 +28,9 @@ public class Field_ArenaController {
 
   @Autowired
   RoomMapper roomMapper;
+
+  @Autowired
+  AsyncFiled_Area asyncFiled_Area;
 
   Draw player = new Draw();
 
@@ -74,10 +79,24 @@ public class Field_ArenaController {
 
   @GetMapping("/room")
   @Transactional
-  public String create_room(@RequestParam String roomName,ModelMap model) {
-    roomMapper.insertName(roomName);
+  public String create_room(@RequestParam String roomName, ModelMap model) {
+    asyncFiled_Area.createRoom(roomName);
     model.addAttribute("room", roomName);
     return "room.html";
   }
 
+  @GetMapping("/inroom")
+  public String entrRoom(@RequestParam Integer id, ModelMap model) {
+    System.out.println("ok");
+    String roomName = roomMapper.selectById(id);
+    model.addAttribute("room", roomName);
+    return "room.html";
+  }
+
+  @GetMapping("/active")
+  public SseEmitter activeRoom() {
+    final SseEmitter emitter = new SseEmitter();
+    this.asyncFiled_Area.asyncRoom(emitter);
+    return emitter;
+  }
 }
