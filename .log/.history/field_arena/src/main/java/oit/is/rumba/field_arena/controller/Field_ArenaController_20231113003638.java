@@ -61,16 +61,12 @@ public class Field_ArenaController {
   @GetMapping("/draw")
   public String draw(ModelMap model) {
     ArrayList<Card> cards = cardMapper.selectAllCards();
-    ArrayList<Card> playerHand = new ArrayList<Card>();
-    ArrayList<Card> cpuHand = new ArrayList<>();
-    playerHand = this.player.getHandList();
-    playerHand.add(this.player.getHand(cards));
-    this.player.setHandList(playerHand);
-    cpuHand = this.Cpu.getHandList();
-    cpuHand.add(this.Cpu.getHand(cards));
-    this.Cpu.setHandList(cpuHand);
-    model.addAttribute("playerhand", playerHand);
-    model.addAttribute("cpuhand", cpuHand);
+    ArrayList<Card> hand = new ArrayList<Card>();
+    ArrayList<Card> chand = new ArrayList<>();
+    hand = this.player.getHandList();
+    hand.add(this.player.getHand(cards));
+    this.player.setHandList(hand);
+    model.addAttribute("hand", hand);
     return "game.html";
   }
 

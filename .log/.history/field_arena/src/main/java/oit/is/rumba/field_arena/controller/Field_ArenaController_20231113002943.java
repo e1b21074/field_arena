@@ -45,32 +45,25 @@ public class Field_ArenaController {
   @GetMapping("/game")
   public String game(ModelMap model) {
     ArrayList<Card> cards = cardMapper.selectAllCards();
-    ArrayList<Card> playerHand = new ArrayList<Card>();
-    ArrayList<Card> cpuHand = new ArrayList<Card>();
+    ArrayList<Card> hand = new ArrayList<Card>();
     for (int i = 0; i < 5; i++) {
-      playerHand.add(this.player.getHand(cards));
-      cpuHand.add(this.Cpu.getHand(cards));
+      hand.add(this.player.getHand(cards));
+      hand.add(this.Cpu.getHand(cards));
     }
-    this.player.setHandList(playerHand);
-    this.Cpu.setHandList(cpuHand);
-    model.addAttribute("playerhand", playerHand);
-    model.addAttribute("cpuhand", cpuHand);
+    this.player.setHandList(hand);
+    this.player.setHandList(hand);
+    model.addAttribute("hand", hand);
     return "game.html";
   }
 
   @GetMapping("/draw")
   public String draw(ModelMap model) {
     ArrayList<Card> cards = cardMapper.selectAllCards();
-    ArrayList<Card> playerHand = new ArrayList<Card>();
-    ArrayList<Card> cpuHand = new ArrayList<>();
-    playerHand = this.player.getHandList();
-    playerHand.add(this.player.getHand(cards));
-    this.player.setHandList(playerHand);
-    cpuHand = this.Cpu.getHandList();
-    cpuHand.add(this.Cpu.getHand(cards));
-    this.Cpu.setHandList(cpuHand);
-    model.addAttribute("playerhand", playerHand);
-    model.addAttribute("cpuhand", cpuHand);
+    ArrayList<Card> hand = new ArrayList<Card>();
+    hand = this.player.getHandList();
+    hand.add(this.player.getHand(cards));
+    this.player.setHandList(hand);
+    model.addAttribute("hand", hand);
     return "game.html";
   }
 

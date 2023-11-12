@@ -11,15 +11,8 @@
 
     <div>
       <ul>
-        you
-        <li th:each="playerhand : ${playerhand}">
-          カード属性:[[${playerhand.cardAttribute}]] 強さ:[[${playerhand.cardStrong}]]
-        </li>
-      </ul>
-      <ul>
-        cpu
-        <li th:each="cpuhand : ${cpuhand}">
-          カード属性:[[${cpuhand.cardAttribute}]] 強さ:[[${cpuhand.cardStrong}]]
+        <li th:each="hand : ${hand}">
+          カード属性:[[${hand.cardAttribute}]] 強さ:[[${hand.cardStrong}]]
         </li>
       </ul>
     </div>

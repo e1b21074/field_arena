@@ -67,7 +67,7 @@ public class Field_ArenaController {
     playerHand.add(this.player.getHand(cards));
     this.player.setHandList(playerHand);
     cpuHand = this.Cpu.getHandList();
-    cpuHand.add(this.Cpu.getHand(cards));
+    playerHand.add(this.Cpu.getHand(cards));
     this.Cpu.setHandList(cpuHand);
     model.addAttribute("playerhand", playerHand);
     model.addAttribute("cpuhand", cpuHand);
