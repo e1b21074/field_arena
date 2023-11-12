@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,19 +19,22 @@
         }
       }
     </script>
-</head>
-<body>
-    <h1>ようこそ！</h1>
-    <h2>ユーザー名：<a sec:authentication="name"></a></h2>
 
-    <div>
-      <button onclick="location.href='/User'">ユーザの表示</button>
-      <ul>
-        <li th:each="user : ${users}">
-          [[${user.userName}]]
-        </li>
-      </ul>
-    </div>
+</head>
+
+<body>
+  <h1>ようこそ！</h1>
+  <h2>ユーザー名：<a sec:authentication="name"></a></h2>
+
+  <div>
+    <button onclick="location.href='/User'">ユーザの表示</button>
+    <ul>
+      <li th:each="user : ${users}">
+        [[${user.userName}]]
+      </li>
+    </ul>
+  </div>
+
 
     <p>
       <form action="/room" method="get">
@@ -41,8 +45,11 @@
 
     <div id="active_room"></div>
 
-    <button onclick="location.href='/game'">ゲームカード</button>
 
-    <button onclick="location.href='/logout'">ログアウト</button>
+  <button onclick="location.href='/game'">ゲームカード</button>
+  <button onclick="location.href='/hpTest'">HPテスト</button>
+
+  <button onclick="location.href='/logout'">ログアウト</button>
 </body>
+
 </html>
