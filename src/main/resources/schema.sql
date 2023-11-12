@@ -9,4 +9,8 @@ CREATE TABLE cards(
   cardStrong INT NOT NULL
 );
 
-
+CREATE TABLE rooms(
+  id IDENTITY,
+  roomName VARCHAR NOT NULL,
+  isActive BOOLEAN NOT NULL
+);

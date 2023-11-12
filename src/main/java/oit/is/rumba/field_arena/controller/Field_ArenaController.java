@@ -1,13 +1,17 @@
 package oit.is.rumba.field_arena.controller;
 
+import java.beans.Transient;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import oit.is.rumba.field_arena.model.*;
 
@@ -19,6 +23,9 @@ public class Field_ArenaController {
 
   @Autowired
   CardMapper cardMapper;
+
+  @Autowired
+  RoomMapper roomMapper;
 
   Draw player = new Draw();
 
@@ -63,6 +70,14 @@ public class Field_ArenaController {
     this.player.setHandList(hand);
     model.addAttribute("hand", hand);
     return "game.html";
+  }
+
+  @GetMapping("/room")
+  @Transactional
+  public String create_room(@RequestParam String roomName,ModelMap model) {
+    roomMapper.insertName(roomName);
+    model.addAttribute("room", roomName);
+    return "room.html";
   }
 
 }
