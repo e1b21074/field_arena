@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -21,6 +22,7 @@ public class Field_ArenaController {
   CardMapper cardMapper;
 
   Draw player = new Draw();
+  HpTest myHp = new HpTest();
 
   @GetMapping("/gamearea")
   public String gamearea() {
@@ -63,6 +65,30 @@ public class Field_ArenaController {
     this.player.setHandList(hand);
     model.addAttribute("hand", hand);
     return "game.html";
+  }
+
+  @GetMapping("/hpTest")
+  public String hp(Model model) {
+    myHp.initHp();
+    int hp = myHp.getHp();
+    model.addAttribute("hp", hp);
+    return "hpTest.html";
+  }
+
+  @GetMapping("/attack")
+  public String attack(Model model) {
+    myHp.minusHp();
+    int hp = myHp.getHp();
+    model.addAttribute("hp", hp);
+    return "hpTest.html";
+  }
+
+  @GetMapping("/heal")
+  public String heal(Model model) {
+    myHp.plusHp();
+    int hp = myHp.getHp();
+    model.addAttribute("hp", hp);
+    return "hpTest.html";
   }
 
 }
