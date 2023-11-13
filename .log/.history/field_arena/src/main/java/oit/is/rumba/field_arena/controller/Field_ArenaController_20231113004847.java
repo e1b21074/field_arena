@@ -2,21 +2,14 @@ package oit.is.rumba.field_arena.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
-import org.springframework.transaction.annotation.Transactional;
-
-import org.springframework.ui.Model;
-
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import oit.is.rumba.field_arena.model.*;
-import oit.is.rumba.field_arena.service.*;
 
 @Controller
 public class Field_ArenaController {
@@ -27,14 +20,7 @@ public class Field_ArenaController {
   @Autowired
   CardMapper cardMapper;
 
-  @Autowired
-  RoomMapper roomMapper;
-
-  @Autowired
-  AsyncFiled_Area asyncFiled_Area;
-
   Draw player = new Draw();
-  HpTest myHp = new HpTest();
   Draw Cpu = new Draw();
 
   @GetMapping("/gamearea")
@@ -87,53 +73,5 @@ public class Field_ArenaController {
     model.addAttribute("cpuhand", cpuHand);
     return "game.html";
   }
-
-  @GetMapping("/room")
-  @Transactional
-  public String create_room(@RequestParam String roomName, ModelMap model) {
-    asyncFiled_Area.createRoom(roomName);
-    model.addAttribute("room", roomName);
-    return "room.html";
-  }
-
-  @GetMapping("/inroom")
-  public String entrRoom(@RequestParam Integer id, ModelMap model) {
-    System.out.println("ok");
-    String roomName = roomMapper.selectById(id);
-    model.addAttribute("room", roomName);
-    return "room.html";
-  }
-
-  @GetMapping("/active")
-  public SseEmitter activeRoom() {
-    final SseEmitter emitter = new SseEmitter();
-    this.asyncFiled_Area.asyncRoom(emitter);
-    return emitter;
-  }
-
-  @GetMapping("/hpTest")
-  public String hp(Model model) {
-    myHp.initHp();
-    int hp = myHp.getHp();
-    model.addAttribute("hp", hp);
-    return "hpTest.html";
-  }
-
-  @GetMapping("/attack")
-  public String attack(Model model) {
-    myHp.minusHp();
-    int hp = myHp.getHp();
-    model.addAttribute("hp", hp);
-    return "hpTest.html";
-  }
-
-  @GetMapping("/heal")
-  public String heal(Model model) {
-    myHp.plusHp();
-    int hp = myHp.getHp();
-    model.addAttribute("hp", hp);
-    return "hpTest.html";
-  }
-
 
 }

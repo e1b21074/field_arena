@@ -1,7 +1,9 @@
 package oit.is.rumba.field_arena.controller;
 
+import java.beans.Transient;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +14,11 @@ import org.springframework.ui.Model;
 
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import oit.is.rumba.field_arena.model.*;
-import oit.is.rumba.field_arena.service.*;
 
 @Controller
 public class Field_ArenaController {
@@ -34,8 +36,10 @@ public class Field_ArenaController {
   AsyncFiled_Area asyncFiled_Area;
 
   Draw player = new Draw();
-  HpTest myHp = new HpTest();
+
   Draw Cpu = new Draw();
+  
+  HpTest myHp = new HpTest();
 
   @GetMapping("/gamearea")
   public String gamearea() {
