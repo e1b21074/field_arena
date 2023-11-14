@@ -35,7 +35,6 @@ public class Field_ArenaController {
 
   Draw player = new Draw();
   HpTest myHp = new HpTest();
-  Draw Cpu = new Draw();
 
   @GetMapping("/gamearea")
   public String gamearea() {
@@ -60,15 +59,14 @@ public class Field_ArenaController {
   public String game(ModelMap model) {
     ArrayList<Card> cards = cardMapper.selectAllCards();
     ArrayList<Card> playerHand = new ArrayList<Card>();
-    ArrayList<Card> cpuHand = new ArrayList<Card>();
     for (int i = 0; i < 5; i++) {
       playerHand.add(this.player.getHand(cards));
-      cpuHand.add(this.Cpu.getHand(cards));
     }
     this.player.setHandList(playerHand);
-    this.Cpu.setHandList(cpuHand);
     model.addAttribute("playerhand", playerHand);
-    model.addAttribute("cpuhand", cpuHand);
+    myHp.initHp();
+    int hp = myHp.getHp();
+    model.addAttribute("hp", hp);
     return "game.html";
   }
 
@@ -76,15 +74,11 @@ public class Field_ArenaController {
   public String draw(ModelMap model) {
     ArrayList<Card> cards = cardMapper.selectAllCards();
     ArrayList<Card> playerHand = new ArrayList<Card>();
-    ArrayList<Card> cpuHand = new ArrayList<>();
     playerHand = this.player.getHandList();
     playerHand.add(this.player.getHand(cards));
     this.player.setHandList(playerHand);
-    cpuHand = this.Cpu.getHandList();
-    cpuHand.add(this.Cpu.getHand(cards));
-    this.Cpu.setHandList(cpuHand);
     model.addAttribute("playerhand", playerHand);
-    model.addAttribute("cpuhand", cpuHand);
+    model.addAttribute("hp", myHp.getHp());
     return "game.html";
   }
 
@@ -99,7 +93,6 @@ public class Field_ArenaController {
   @GetMapping("/inroom")
   public String entrRoom(@RequestParam Integer id, Principal prin, ModelMap model) {
     String roomName = roomMapper.selectById(id);
-
     asyncFiled_Area.enterRoom(id, prin.getName());
     model.addAttribute("room", roomName);
     return "room.html";
@@ -125,7 +118,8 @@ public class Field_ArenaController {
     myHp.minusHp();
     int hp = myHp.getHp();
     model.addAttribute("hp", hp);
-    return "hpTest.html";
+    model.addAttribute("playerhand", this.player.getHandList());
+    return "game.html";
   }
 
   @GetMapping("/heal")
@@ -133,15 +127,15 @@ public class Field_ArenaController {
     myHp.plusHp();
     int hp = myHp.getHp();
     model.addAttribute("hp", hp);
-    return "hpTest.html";
+    model.addAttribute("playerhand", this.player.getHandList());
+    return "game.html";
   }
 
   @GetMapping("/start")
-  public SseEmitter start(){
+  public SseEmitter start() {
     final SseEmitter emitter = new SseEmitter();
     this.asyncFiled_Area.asyncEnter(emitter);
     return emitter;
   }
-
 
 }
