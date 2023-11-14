@@ -31,10 +31,12 @@ public class Field_ArenaController {
   RoomMapper roomMapper;
 
   @Autowired
+  HpMapper hpMapper;
+
+  @Autowired
   AsyncFiled_Area asyncFiled_Area;
 
   Draw player = new Draw();
-  HpTest myHp = new HpTest();
 
   @GetMapping("/gamearea")
   public String gamearea() {
@@ -56,7 +58,7 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/game")
-  public String game(ModelMap model) {
+  public String game(ModelMap model, Principal prin) {
     ArrayList<Card> cards = cardMapper.selectAllCards();
     ArrayList<Card> playerHand = new ArrayList<Card>();
     for (int i = 0; i < 5; i++) {
@@ -64,21 +66,30 @@ public class Field_ArenaController {
     }
     this.player.setHandList(playerHand);
     model.addAttribute("playerhand", playerHand);
-    myHp.initHp();
-    int hp = myHp.getHp();
-    model.addAttribute("hp", hp);
+
+    // HP処理
+    int roomsId = 1;// 一旦定数->rommMapperを使用して受け取りたい
+    String userName = prin.getName();
+    hpMapper.createHp(roomsId, userName);
+    Hp hp = hpMapper.selectMyHp(roomsId, userName);
+    model.addAttribute("hp", hp.getHp());
     return "game.html";
   }
 
   @GetMapping("/draw")
-  public String draw(ModelMap model) {
+  public String draw(ModelMap model, Principal prin) {
     ArrayList<Card> cards = cardMapper.selectAllCards();
     ArrayList<Card> playerHand = new ArrayList<Card>();
     playerHand = this.player.getHandList();
     playerHand.add(this.player.getHand(cards));
     this.player.setHandList(playerHand);
     model.addAttribute("playerhand", playerHand);
-    model.addAttribute("hp", myHp.getHp());
+
+    // HP
+    int roomsId = 1;// 一旦定数->rommMapperを使用して受け取りたい
+    String userName = prin.getName();
+    Hp hp = hpMapper.selectMyHp(roomsId, userName);
+    model.addAttribute("hp", hp.getHp());
     return "game.html";
   }
 
@@ -105,28 +116,39 @@ public class Field_ArenaController {
     return emitter;
   }
 
-  @GetMapping("/hpTest")
-  public String hp(Model model) {
-    myHp.initHp();
-    int hp = myHp.getHp();
-    model.addAttribute("hp", hp);
-    return "hpTest.html";
-  }
+  /*
+   * @GetMapping("/hpTest")
+   * public String hp(Model model) {
+   * myHp.initHp();
+   * int hp = myHp.getHp();
+   * model.addAttribute("hp", hp);
+   * return "hpTest.html";
+   * }
+   */
 
   @GetMapping("/attack")
-  public String attack(Model model) {
-    myHp.minusHp();
-    int hp = myHp.getHp();
-    model.addAttribute("hp", hp);
+  public String attack(Model model, Principal prin) {
+    // 敵のHP
+    int roomsId = 1;// 一旦定数->rommMapperを使用して受け取りたい
+    String userName = prin.getName();
+    Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);// 同じルームの自分の名前じゃないプレイヤーのHP
+    enemyHp.minusHp();
+    hpMapper.updateEnemyHp(roomsId, userName, enemyHp.getHp());
+    // 自分のHP
+    Hp myHp = hpMapper.selectMyHp(roomsId, userName);
+    model.addAttribute("hp", myHp.getHp());
     model.addAttribute("playerhand", this.player.getHandList());
     return "game.html";
   }
 
   @GetMapping("/heal")
-  public String heal(Model model) {
+  public String heal(Model model, Principal prin) {
+    int roomsId = 1;// 一旦定数->rommMapperを使用して受け取りたい
+    String userName = prin.getName();
+    Hp myHp = hpMapper.selectMyHp(roomsId, userName);
     myHp.plusHp();
-    int hp = myHp.getHp();
-    model.addAttribute("hp", hp);
+    hpMapper.updateMyHp(roomsId, userName, myHp.getHp());
+    model.addAttribute("hp", myHp.getHp());
     model.addAttribute("playerhand", this.player.getHandList());
     return "game.html";
   }
