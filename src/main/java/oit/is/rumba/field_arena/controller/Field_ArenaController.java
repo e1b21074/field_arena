@@ -90,7 +90,7 @@ public class Field_ArenaController {
   @GetMapping("/inroom")
   public String entrRoom(@RequestParam Integer id, Principal prin, ModelMap model) {
     String roomName = roomMapper.selectById(id);
-    
+
     asyncFiled_Area.enterRoom(id, prin.getName());
     model.addAttribute("room", roomName);
     return "room.html";
@@ -130,8 +130,9 @@ public class Field_ArenaController {
   @GetMapping("/start")
   public SseEmitter start(){
     final SseEmitter emitter = new SseEmitter();
+    this.asyncFiled_Area.asyncEnter(emitter);
     return emitter;
   }
- 
+
 
 }

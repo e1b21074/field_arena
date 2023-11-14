@@ -17,8 +17,9 @@ import oit.is.rumba.field_arena.model.*;
 @Service
 public class AsyncFiled_Area {
   boolean Room_falg = false;
-  boolean Room_enter = false;
+  boolean Room_enter = false; //入室用のフラグ
   int cnt = 0;
+  int ent_cnt = 0;            //入室を表示した回数
 
   private final Logger logger = LoggerFactory.getLogger(AsyncFiled_Area.class);
 
@@ -69,7 +70,14 @@ public class AsyncFiled_Area {
           TimeUnit.MILLISECONDS.sleep(500);
           continue;
         }
-        
+        Room room = roomMapper.selectAllByAtiveandNum();
+        emitter.send(room);
+        ent_cnt++;
+        if (ent_cnt == 2) {
+          Room_enter = false;
+          ent_cnt = 0;
+        }
+        TimeUnit.MILLISECONDS.sleep(1000);
       }
     }catch (Exception e) {
       logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());
