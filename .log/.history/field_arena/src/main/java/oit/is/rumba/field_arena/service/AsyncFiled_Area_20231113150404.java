@@ -17,7 +17,6 @@ import oit.is.rumba.field_arena.model.*;
 @Service
 public class AsyncFiled_Area {
   boolean Room_falg = false;
-  boolean Room_enter = false;
   int cnt = 0;
 
   private final Logger logger = LoggerFactory.getLogger(AsyncFiled_Area.class);
@@ -47,29 +46,6 @@ public class AsyncFiled_Area {
           cnt = 0;
         }
         TimeUnit.MILLISECONDS.sleep(10000);
-      }
-    }catch (Exception e) {
-      logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());
-    } finally {
-      emitter.complete();
-    }
-    System.out.println("asyncRoom complete");
-  }
-
-  public void enterRoom(int id){
-    roomMapper.updateById(id);
-    Room_enter=true;
-  }
-
-  @Async
-  public void asyncEnter(SseEmitter emitter){
-    try{
-      while(true){
-        if(Room_enter==false){
-          TimeUnit.MILLISECONDS.sleep(500);
-          continue;
-        }
-        
       }
     }catch (Exception e) {
       logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());

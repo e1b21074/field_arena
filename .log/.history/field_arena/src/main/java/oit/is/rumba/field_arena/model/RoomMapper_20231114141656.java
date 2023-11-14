@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface RoomMapper {
@@ -17,8 +16,4 @@ public interface RoomMapper {
 
   @Select("select roomName from rooms where id=#{id}")
   String selectById(int id);
-
-  @Update("UPDATE ROOMS SET USERNUM=2 WHERE id=#{id}")
-  void updateById(int id);
-
 }

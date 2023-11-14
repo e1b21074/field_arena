@@ -1,7 +1,9 @@
 package oit.is.rumba.field_arena.controller;
 
+import java.beans.Transient;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -89,8 +92,8 @@ public class Field_ArenaController {
 
   @GetMapping("/inroom")
   public String entrRoom(@RequestParam Integer id, ModelMap model) {
+    System.out.println("ok");
     String roomName = roomMapper.selectById(id);
-    asyncFiled_Area.enterRoom(id);
     model.addAttribute("room", roomName);
     return "room.html";
   }
@@ -126,11 +129,5 @@ public class Field_ArenaController {
     return "hpTest.html";
   }
 
-  @GetMapping("/start")
-  public SseEmitter start(){
-    final SseEmitter emitter = new SseEmitter();
-    return emitter;
-  }
- 
 
 }

@@ -11,7 +11,10 @@
         sse.onmessage=function(event){
           var active_list=JSON.parse(event.data);
           var active_div="<button onclick=location.href='/game'>ゲーム開始</button>";
-          var div=document.getElementById("game");
+          for (var i=0;i<active_list.length;i++){
+            active_div=active_div+ "<p><a href=" + "/inroom?id=" + active_list[i].id + ">" + active_list[i].roomName + "</a></p>";
+          }
+          var div=document.getElementById("active_room");
           div.innerHTML=active_div;
         }
     }

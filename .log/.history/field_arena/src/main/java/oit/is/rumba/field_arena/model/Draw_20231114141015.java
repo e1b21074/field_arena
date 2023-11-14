@@ -1,5 +1,6 @@
 package oit.is.rumba.field_arena.model;
 
+import oit.is.rumba.field_arena.model.*;
 import java.util.ArrayList;
 import java.util.Random;
 
