@@ -21,7 +21,4 @@ public interface RoomMapper {
   @Update("UPDATE ROOMS SET user2=#{user2}, USERNUM=2 WHERE id=#{id}")
   void updateById(int id, String user2);
 
-  @Select("select * from rooms where isActive=true and usernum=2")
-  Room selectAllByAtiveandNum();
-
 }

@@ -12,8 +12,5 @@ CREATE TABLE cards(
 CREATE TABLE rooms(
   id IDENTITY,
   roomName VARCHAR NOT NULL,
-  user1 VARCHAR NOT NULL,
-  user2 VARCHAR,
-  usernum INT,
   isActive BOOLEAN NOT NULL
 );

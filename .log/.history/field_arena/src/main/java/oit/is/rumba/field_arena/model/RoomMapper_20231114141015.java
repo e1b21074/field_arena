@@ -3,25 +3,18 @@ import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface RoomMapper {
 
-  @Insert("INSERT INTO rooms (roomName,user1,usernum,isActive) VALUES (#{roomName},#{user1},1,true);")
-  void insertName(String roomName, String user1);
+  @Insert("INSERT INTO rooms (roomName,isActive) VALUES (#{roomName},true);")
+  void insertName(String roomName);
 
   @Select("select * from rooms where isActive=true")
   ArrayList<Room> selectByActive();
 
   @Select("select roomName from rooms where id=#{id}")
   String selectById(int id);
-
-  @Update("UPDATE ROOMS SET user2=#{user2}, USERNUM=2 WHERE id=#{id}")
-  void updateById(int id, String user2);
-
-  @Select("select * from rooms where isActive=true and usernum=2")
-  Room selectAllByAtiveandNum();
-
 }

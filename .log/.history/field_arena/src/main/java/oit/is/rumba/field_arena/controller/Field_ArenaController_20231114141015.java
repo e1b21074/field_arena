@@ -1,7 +1,9 @@
 package oit.is.rumba.field_arena.controller;
 
+import java.beans.Transient;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -35,7 +38,6 @@ public class Field_ArenaController {
 
   Draw player = new Draw();
   HpTest myHp = new HpTest();
-  Draw Cpu = new Draw();
 
   @GetMapping("/gamearea")
   public String gamearea() {
@@ -59,48 +61,39 @@ public class Field_ArenaController {
   @GetMapping("/game")
   public String game(ModelMap model) {
     ArrayList<Card> cards = cardMapper.selectAllCards();
-    ArrayList<Card> playerHand = new ArrayList<Card>();
-    ArrayList<Card> cpuHand = new ArrayList<Card>();
+    ArrayList<Card> hand = new ArrayList<Card>();
+    this.player = new Draw();
     for (int i = 0; i < 5; i++) {
-      playerHand.add(this.player.getHand(cards));
-      cpuHand.add(this.Cpu.getHand(cards));
+      hand.add(this.player.getHand(cards));
     }
-    this.player.setHandList(playerHand);
-    this.Cpu.setHandList(cpuHand);
-    model.addAttribute("playerhand", playerHand);
-    model.addAttribute("cpuhand", cpuHand);
+    this.player.setHandList(hand);
+    model.addAttribute("hand", hand);
     return "game.html";
   }
 
   @GetMapping("/draw")
   public String draw(ModelMap model) {
     ArrayList<Card> cards = cardMapper.selectAllCards();
-    ArrayList<Card> playerHand = new ArrayList<Card>();
-    ArrayList<Card> cpuHand = new ArrayList<>();
-    playerHand = this.player.getHandList();
-    playerHand.add(this.player.getHand(cards));
-    this.player.setHandList(playerHand);
-    cpuHand = this.Cpu.getHandList();
-    cpuHand.add(this.Cpu.getHand(cards));
-    this.Cpu.setHandList(cpuHand);
-    model.addAttribute("playerhand", playerHand);
-    model.addAttribute("cpuhand", cpuHand);
+    ArrayList<Card> hand = new ArrayList<Card>();
+    hand = this.player.getHandList();
+    hand.add(this.player.getHand(cards));
+    this.player.setHandList(hand);
+    model.addAttribute("hand", hand);
     return "game.html";
   }
 
   @GetMapping("/room")
   @Transactional
-  public String create_room(@RequestParam String roomName, Principal prin, ModelMap model) {
-    asyncFiled_Area.createRoom(roomName, prin.getName());
+  public String create_room(@RequestParam String roomName, ModelMap model) {
+    asyncFiled_Area.createRoom(roomName);
     model.addAttribute("room", roomName);
     return "room.html";
   }
 
   @GetMapping("/inroom")
-  public String entrRoom(@RequestParam Integer id, Principal prin, ModelMap model) {
+  public String entrRoom(@RequestParam Integer id, ModelMap model) {
+    System.out.println("ok");
     String roomName = roomMapper.selectById(id);
-
-    asyncFiled_Area.enterRoom(id, prin.getName());
     model.addAttribute("room", roomName);
     return "room.html";
   }
@@ -134,13 +127,6 @@ public class Field_ArenaController {
     int hp = myHp.getHp();
     model.addAttribute("hp", hp);
     return "hpTest.html";
-  }
-
-  @GetMapping("/start")
-  public SseEmitter start(){
-    final SseEmitter emitter = new SseEmitter();
-    this.asyncFiled_Area.asyncEnter(emitter);
-    return emitter;
   }
 
 

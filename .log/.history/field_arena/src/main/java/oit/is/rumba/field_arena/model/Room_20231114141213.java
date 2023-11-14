@@ -3,8 +3,6 @@ package oit.is.rumba.field_arena.model;
 public class Room {
   int id;
   String roomName;
-  String user1;
-  String user2;
   int usernum;
   boolean isActive;
 
@@ -14,22 +12,6 @@ public class Room {
 
   public void setUsernum(int usernum) {
     this.usernum = usernum;
-  }
-
-  public String getUser1() {
-    return user1;
-  }
-
-  public void setUser1(String user1) {
-    this.user1 = user1;
-  }
-
-  public String getUser2() {
-    return user2;
-  }
-
-  public void setUser2(String user2) {
-    this.user2 = user2;
   }
 
   public int getId() {

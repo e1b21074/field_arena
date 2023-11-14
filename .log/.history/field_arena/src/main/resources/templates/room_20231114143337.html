@@ -10,8 +10,11 @@
       var sse = new EventSource('/start');
         sse.onmessage=function(event){
           var active_list=JSON.parse(event.data);
-          var active_div="<h2>"+active_list.user1+" vs "+active_list.user2+"</h2>"+"<button onclick=location.href='/game'>ゲーム開始</button>";
-          var div=document.getElementById("game");
+          var active_div="<button onclick=location.href='/game'>ゲーム開始</button>";
+          for (var i=0;i<active_list.length;i++){
+            active_div=active_div+ "<p><a href=" + "/inroom?id=" + active_list[i].id + ">" + active_list[i].roomName + "</a></p>";
+          }
+          var div=document.getElementById("active_room");
           div.innerHTML=active_div;
         }
     }
@@ -19,7 +22,7 @@
 </head>
 <body>
   <h1>[[${room}]]部屋</h1>
-  <div id="game">
+  <div>
     相手を待っています
   </div>
 </body>
