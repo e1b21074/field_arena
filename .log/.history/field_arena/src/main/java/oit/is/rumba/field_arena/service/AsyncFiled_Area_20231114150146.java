@@ -26,8 +26,8 @@ public class AsyncFiled_Area {
   RoomMapper roomMapper;
 
   @Transactional
-  public void createRoom(String roomName, String user1) {
-    roomMapper.insertName(roomName, user1);
+  public void createRoom(String roomName) {
+    roomMapper.insertName(roomName);
     Room_falg = true;
   }
 

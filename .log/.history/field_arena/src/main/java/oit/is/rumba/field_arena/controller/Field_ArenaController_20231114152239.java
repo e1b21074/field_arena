@@ -81,8 +81,8 @@ public class Field_ArenaController {
 
   @GetMapping("/room")
   @Transactional
-  public String create_room(@RequestParam String roomName, Principal prin, ModelMap model) {
-    asyncFiled_Area.createRoom(roomName, prin.getName());
+  public String create_room(@RequestParam String roomName, ModelMap model) {
+    asyncFiled_Area.createRoom(roomName);
     model.addAttribute("room", roomName);
     return "room.html";
   }
