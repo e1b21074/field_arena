@@ -22,7 +22,12 @@
 
 <body>
   <div>
+    <ul>
       <h2><span sec:authentication="name"></span> のHP : <span th:if="${hp}" th:text="${hp}"></span></h2>
+        <li th:each="playerhand : ${playerhand}">
+          カード属性:[[${playerhand.cardAttribute}]] 強さ:[[${playerhand.cardStrong}]]
+        </li>
+    </ul>
   </div>
   <div>
     <h2>
@@ -38,12 +43,6 @@
       <button onclick="location.href='/logout'">ログアウト</button>
     </h2>
   </div>  
-
-  <div>
-    <ul>
-      <h1><li th:each="playerhand : ${playerhand}">カード属性:[[${playerhand.cardAttribute}]] 強さ:[[${playerhand.cardStrong}]]</li></h1>
-    </ul>
-  </div>
 </body>
 
 </html>
