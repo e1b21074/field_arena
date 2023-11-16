@@ -17,3 +17,10 @@ CREATE TABLE rooms(
   usernum INT,
   isActive BOOLEAN NOT NULL
 );
+
+CREATE TABLE userHp (
+  id IDENTITY,
+  roomsId INT,
+  userName VARCHAR NOT NULL,
+  hp INT
+);
