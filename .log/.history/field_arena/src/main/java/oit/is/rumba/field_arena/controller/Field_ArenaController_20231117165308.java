@@ -82,12 +82,11 @@ public class Field_ArenaController {
   @GetMapping("/draw")
   public String draw(ModelMap model, Principal prin) {
     ArrayList<Card> cards = cardMapper.selectAllCards();
-    PlayerHand hand = new PlayerHand();
-    Draw player = new Draw();
-    hand.setUserName(prin.getName());
-    hand.setCard_id(player.getHand(cards).getId());
-    playerHandMapper.setPlayerHand(hand.getUserName(), hand.getCard_id());
-    model.addAttribute("playerhand", playerHandMapper.selectCardByUserName(prin.getName()));
+    ArrayList<Card> playerHand = new ArrayList<Card>();
+    // playerHand = this.player.getHandList();
+    // playerHand.add(this.player.getHand(cards));
+    // this.player.setHandList(playerHand);
+    // model.addAttribute("playerhand", playerHand);
 
     // HP
     int roomsId = 1;// 一旦定数->rommMapperを使用して受け取りたい
