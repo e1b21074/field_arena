@@ -28,5 +28,5 @@ CREATE TABLE userHp (
 CREATE TABLE playerHand (
   id IDENTITY,
   userName VARCHAR NOT NULL,
-  card_id INT NOT NULL
+  card_id INT NOT NULL;
 );
