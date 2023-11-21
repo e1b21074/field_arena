@@ -10,7 +10,7 @@
       var sse = new EventSource('/start');
         sse.onmessage=function(event){
           var active_list=JSON.parse(event.data);
-          var active_div="<h2>"+active_list.user1+" vs "+active_list.user2+"</h2>"+"<button onclick=location.href='/game?id="+active_list.id+"'>ゲーム開始</button>";
+          var active_div="<h2>"+active_list.user1+" vs "+active_list.user2+"</h2>"+"<button onclick=location.href='/game?roomid="+active_list.id+"'>ゲーム開始</button>";
           var div=document.getElementById("game");
           div.innerHTML=active_div;
         }

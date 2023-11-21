@@ -40,12 +40,12 @@ public class Hp {
     this.hp = hp;
   }
 
-  public void minusHp() {
-    this.hp--;
+  public void minusHp(int strong) {
+    this.hp-=strong;
   }
 
-  public void plusHp() {
-    this.hp++;
+  public void plusHp(int healPoint) {
+    this.hp+=healPoint;
   }
 
   public void initHp() {

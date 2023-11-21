@@ -11,4 +11,7 @@ public interface CardMapper {
   @Select("select * from cards")
   ArrayList<Card> selectAllCards();
 
+  @Select("select * from cards where id=#{id}")
+  Card selectCardById(int id);
+
 }
