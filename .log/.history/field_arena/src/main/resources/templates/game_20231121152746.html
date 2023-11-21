@@ -17,20 +17,6 @@
     }
   </style>
   <title>カードゲーム</title>
-  <script>
-    window.onload=function(){
-      const params = new URLSearchParams(window.location.search);
-      const paramName = 'roomid';
-      const paramValue = params.get(paramName);
-      var sse = new EventSource('/HPasync?roomid='+paramValue);
-        sse.onmessage=function(event){
-          var active_list=JSON.parse(event.data);
-          var div=document.getElementById("HP");
-          div.innerHTML="やった";
-        }
-    }
-
-  </script>
 </head>
 
 <body>
@@ -39,15 +25,19 @@
   </div>
   <div><span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}"
       th:text="${enemy.hp}"></span></div>
+  <div>
+    <h2>
+      <button onclick="attackfunk()">ダメージ</button>
+      <button onclick="healfunk()">回復</button>
+    </h2>
+  </div>
 
   <div>
     <h2>
       <button onclick="drawfunk()">ドロー</button>
       <button onclick="location.href='/gamearea'">戻る</button>
       <button onclick="location.href='/logout'">ログアウト</button>
-      <p id="HP"></p>
     </h2>
-
   </div>
 
   <div>

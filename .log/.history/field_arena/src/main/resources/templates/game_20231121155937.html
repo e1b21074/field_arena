@@ -30,6 +30,15 @@
         }
     }
 
+    function drawfunk() {
+      //現在のパラメータを取得
+      const params = new URLSearchParams(window.location.search);
+      const paramName = 'roomid';
+      const paramValue = params.get(paramName);
+      //パラメータを含めたUrlを生成
+      var href = "/draw?roomid=";
+      window.location.href = href + paramValue;
+    }
   </script>
 </head>
 
@@ -59,8 +68,8 @@
       </h1>
     </ul>
   </div>
-
-  <!--以下はjavascriptで各操作時に部屋のidをパラメータとして渡す-->
+<!--
+  以下はjavascriptで各操作時に部屋のidをパラメータとして渡す
   <script>
 
     //ドローのボタンが押された際の処理
@@ -75,6 +84,7 @@
     }
 
   </script>
+  -->
 </body>
 
 </html>

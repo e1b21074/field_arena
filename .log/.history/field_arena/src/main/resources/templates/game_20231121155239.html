@@ -26,10 +26,9 @@
         sse.onmessage=function(event){
           var active_list=JSON.parse(event.data);
           var div=document.getElementById("HP");
-          div.innerHTML="やった";
+          div.innerHTML=active_div;
         }
     }
-
   </script>
 </head>
 
@@ -45,9 +44,7 @@
       <button onclick="drawfunk()">ドロー</button>
       <button onclick="location.href='/gamearea'">戻る</button>
       <button onclick="location.href='/logout'">ログアウト</button>
-      <p id="HP"></p>
     </h2>
-
   </div>
 
   <div>

@@ -25,11 +25,11 @@
       var sse = new EventSource('/HPasync?roomid='+paramValue);
         sse.onmessage=function(event){
           var active_list=JSON.parse(event.data);
-          var div=document.getElementById("HP");
-          div.innerHTML="やった";
+          var active_div="<h2>"+active_list.user1+" vs "+active_list.user2+"</h2>"+"<button onclick=location.href='/game?roomid="+active_list.id+"'>ゲーム開始</button>";
+          var div=document.getElementById("game");
+          div.innerHTML=active_div;
         }
     }
-
   </script>
 </head>
 
@@ -45,9 +45,7 @@
       <button onclick="drawfunk()">ドロー</button>
       <button onclick="location.href='/gamearea'">戻る</button>
       <button onclick="location.href='/logout'">ログアウト</button>
-      <p id="HP"></p>
     </h2>
-
   </div>
 
   <div>

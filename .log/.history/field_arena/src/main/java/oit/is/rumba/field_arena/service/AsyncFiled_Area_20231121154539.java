@@ -91,7 +91,7 @@ public class AsyncFiled_Area {
   }
 
   @Async
-  public void HPAsyncEmitter(SseEmitter emitter, int roomid){
+  public void HPAsyncEmitter(SseEmitter emitter){
     try{
       while(true){
         ArrayList<Hp> hps = hpMapper.selectByRoomId(roomid);
