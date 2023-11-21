@@ -59,7 +59,7 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/game")
-  public String game(@RequestParam Integer id, ModelMap model, Principal prin) {
+  public String game(@RequestParam Integer roomid, ModelMap model, Principal prin) {
     ArrayList<Card> cards = cardMapper.selectAllCards();
     PlayerHand hand = new PlayerHand();
     Draw player = new Draw();
@@ -71,7 +71,7 @@ public class Field_ArenaController {
     model.addAttribute("playerhand", playerHandMapper.selectCardByUserName(prin.getName()));
 
     // HP処理
-    int roomsId = id;// 一旦定数->rommMapperを使用して受け取りたい ←部屋のidをリンクのパラムとして取得した
+    int roomsId = roomid;// 一旦定数->rommMapperを使用して受け取りたい ←部屋のidをリンクのパラムとして取得した
     String userName = prin.getName();
     // hpMapper.createHp(roomsId, userName);
     Hp hp = hpMapper.selectMyHp(roomsId, userName);
@@ -145,27 +145,26 @@ public class Field_ArenaController {
    */
 
   @GetMapping("/cardUse")
-  public String cardUse(@RequestParam String id, Model model, Principal prin) {
+  public String cardUse(@RequestParam String id,@RequestParam Integer roomid, Model model, Principal prin) {
     Card card = cardMapper.selectCardById(Integer.parseInt(id));
 
     if (card.getCardAttribute().equals("武器")) {
-      attack(model, prin);
+      attack(card,roomid,model, prin);
     } else if (card.getCardAttribute().equals("防具")) {
 
     } else if (card.getCardAttribute().equals("回復")) {
-      heal(model, prin);
+      heal(card,roomid, model, prin);
     }
-
     return "game.html";
   }
 
   // @GetMapping("/attack")
-  public String attack(Model model, Principal prin) {
+  public String attack(Card card,int roomid,Model model, Principal prin) {
     // 敵のHP
-    int roomsId = 1;// Integer.parseInt(id);// 一旦定数->rommMapperを使用して受け取りたい
+    int roomsId = roomid;// Integer.parseInt(id);// 一旦定数->rommMapperを使用して受け取りたい
     String userName = prin.getName();
     Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);// 同じルームの自分の名前じゃないプレイヤーのHP
-    enemyHp.minusHp();
+    enemyHp.minusHp(card.getCardStrong());
     hpMapper.updateEnemyHp(roomsId, userName, enemyHp.getHp());
     model.addAttribute("enemy", enemyHp);
     // 自分のHP
@@ -177,17 +176,18 @@ public class Field_ArenaController {
   }
 
   // @GetMapping("/heal")
-  public String heal(Model model, Principal prin) {
-    int roomsId = 1;// Integer.parseInt(id);// 一旦定数->rommMapperを使用して受け取りたい
+  public String heal(Card card,int roomid,Model model, Principal prin) {
+    int roomsId = roomid;// Integer.parseInt(id);// 一旦定数->rommMapperを使用して受け取りたい
     String userName = prin.getName();
     Hp myHp = hpMapper.selectMyHp(roomsId, userName);
-    myHp.plusHp();
+    myHp.plusHp(card.getCardStrong());
     hpMapper.updateMyHp(roomsId, userName, myHp.getHp());
     model.addAttribute("hp", myHp.getHp());
     model.addAttribute("playerhand", playerHandMapper.selectCardByUserName(prin.getName()));
     // 敵のHP
     Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
     model.addAttribute("enemy", enemyHp);
+    model.addAttribute("roomsId", roomsId);
     return "game.html";
   }
 

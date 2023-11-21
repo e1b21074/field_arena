@@ -44,7 +44,7 @@
     <ul>
       <h1>
         <li th:each="playerhand : ${playerhand}"><a
-            th:href="@{/cardUse(id=${playerhand.id})}">カード属性:[[${playerhand.cardAttribute}]]
+            th:href="@{/cardUse(id=${playerhand.id},roomid=${roomsId})}">カード属性:[[${playerhand.cardAttribute}]]
             強さ:[[${playerhand.cardStrong}]]</a></li>
       </h1>
     </ul>
@@ -57,10 +57,10 @@
     function attackfunk() {
       //現在のパラメータを取得
       const params = new URLSearchParams(window.location.search);
-      const paramName = 'id';
+      const paramName = 'roomid';
       const paramValue = params.get(paramName);
       //パラメータを含めたUrlを生成
-      var href = "/attack?id=";
+      var href = "/attack?roomid=";
       window.location.href = href + paramValue;
 
     }
