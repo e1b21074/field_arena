@@ -25,7 +25,7 @@ public interface HpMapper {
   @Update("UPDATE userHp SET hp=#{hp} WHERE roomsId = #{roomsId} AND userName <> #{userName}")
   void updateEnemyHp(int roomsId, String userName, int hp);
 
-  @Select("select * from userHp where roomsid=#{roomid}" )
+  @Select("select * from userHp where roomid=#{roomid}" )
   ArrayList<Hp> selectByRoomId(int roomid);
 
 }

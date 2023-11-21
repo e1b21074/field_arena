@@ -24,14 +24,21 @@
       const paramValue = params.get(paramName);
       var sse = new EventSource('/HPasync?roomid='+paramValue);
         sse.onmessage=function(event){
-          var hp_list=JSON.parse(event.data);
-            var user1Hpdata = hp_list[0].hp;
-            var user2Hpdata = hp_list[1].hp;
+          var active_list=JSON.parse(event.data);
           var div=document.getElementById("HP");
-          div.innerHTML=user1Hpdata + "aa" + user2Hpdata;
+          div.innerHTML="やった";
         }
     }
 
+    function drawfunk() {
+      //現在のパラメータを取得
+      const params = new URLSearchParams(window.location.search);
+      const paramName = 'roomid';
+      const paramValue = params.get(paramName);
+      //パラメータを含めたUrlを生成
+      var href = "/draw?roomid=";
+      window.location.href = href + paramValue;
+    }
   </script>
 </head>
 
@@ -47,11 +54,10 @@
       <button onclick="drawfunk()">ドロー</button>
       <button onclick="location.href='/gamearea'">戻る</button>
       <button onclick="location.href='/logout'">ログアウト</button>
+      <p id="HP"></p>
     </h2>
 
   </div>
-
-  <div id="HP"></div>
 
   <div>
     <ul>
@@ -62,8 +68,8 @@
       </h1>
     </ul>
   </div>
-
-  <!--以下はjavascriptで各操作時に部屋のidをパラメータとして渡す-->
+<!--
+  以下はjavascriptで各操作時に部屋のidをパラメータとして渡す
   <script>
 
     //ドローのボタンが押された際の処理
@@ -78,6 +84,7 @@
     }
 
   </script>
+  -->
 </body>
 
 </html>

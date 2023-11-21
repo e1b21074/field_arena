@@ -198,11 +198,4 @@ public class Field_ArenaController {
     return emitter;
   }
 
-  @GetMapping("/HPasync")
-  public SseEmitter HPasync(@RequestParam Integer roomid) {
-    final SseEmitter emitter = new SseEmitter();
-    this.asyncFiled_Area.HPAsyncEmitter(emitter,roomid);
-    return emitter;
-  }
-
 }

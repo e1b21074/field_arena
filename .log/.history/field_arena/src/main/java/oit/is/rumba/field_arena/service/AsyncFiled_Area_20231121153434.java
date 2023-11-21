@@ -26,9 +26,6 @@ public class AsyncFiled_Area {
   @Autowired
   RoomMapper roomMapper;
 
-  @Autowired
-  HpMapper hpMapper;
-
   @Transactional
   public void createRoom(String roomName, String user1) {
     roomMapper.insertName(roomName, user1);
@@ -91,10 +88,10 @@ public class AsyncFiled_Area {
   }
 
   @Async
-  public void HPAsyncEmitter(SseEmitter emitter, int roomid){
+  public void HPAsyncEmitter(SseEmitter emitter){
     try{
       while(true){
-        ArrayList<Hp> hps = hpMapper.selectByRoomId(roomid);
+        ArrayList<Hp> hps = hpMapper.selectAll();
         emitter.send(hps);
         TimeUnit.MILLISECONDS.sleep(1000);
       }
