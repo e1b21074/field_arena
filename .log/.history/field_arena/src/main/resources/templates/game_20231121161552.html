@@ -25,10 +25,8 @@
       var sse = new EventSource('/HPasync?roomid='+paramValue);
         sse.onmessage=function(event){
           var hp_list=JSON.parse(event.data);
-            var user1Hpdata = hp_list[0].hp;
-            var user2Hpdata = hp_list[1].hp;
           var div=document.getElementById("HP");
-          div.innerHTML=user1Hpdata + "aa" + user2Hpdata;
+          div.innerHTML="やった";
         }
     }
 
