@@ -91,7 +91,7 @@ public class Field_ArenaController {
     hand.setUserName(prin.getName());
     hand.setCard_id(player.getHand(cards).getId());
     playerHandMapper.setPlayerHand(hand.getUserName(), hand.getCard_id());
-    model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
+    model.addAttribute("playerhand", playerHandMapper.selectCardByUserName(prin.getName()));
 
     // HP
     int roomsId = Integer.parseInt(roomid);// 一旦定数->rommMapperを使用して受け取りたい
@@ -171,7 +171,7 @@ public class Field_ArenaController {
     Hp myHp = hpMapper.selectMyHp(roomsId, userName);
     model.addAttribute("hp", myHp.getHp());
     playerHandMapper.deletePlayerHand(playerHandMapper.selecthandnum(userName, card.getId()).get(0).getId());
-    model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
+    model.addAttribute("playerhand", playerHandMapper.selectCardByUserName(prin.getName()));
     model.addAttribute("roomsId", roomsId);
     return "game.html";
   }
@@ -185,7 +185,7 @@ public class Field_ArenaController {
     hpMapper.updateMyHp(roomsId, userName, myHp.getHp());
     model.addAttribute("hp", myHp.getHp());
     playerHandMapper.deletePlayerHand(playerHandMapper.selecthandnum(userName, card.getId()).get(0).getId());
-    model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
+    model.addAttribute("playerhand", playerHandMapper.selectCardByUserName(prin.getName()));
     // 敵のHP
     Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
     model.addAttribute("enemy", enemyHp);
