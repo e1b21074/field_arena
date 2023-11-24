@@ -66,7 +66,7 @@
   <div style="text-align: center">
     <a onclick="attackfunk()"><img th:src="@{img/剣.png}" width="345" height="345"></a>
     <a onclick="healfunk()"><img th:src="@{img/杖.png}" width="345" height="345"></a>
-    <a onclick="guardfunk()"><img th:src="@{img/盾.png}" width="345" height="345"></a>
+    <img th:src="@{img/盾.png}" width="345" height="345">
   </div>
 
 
@@ -81,10 +81,6 @@
     //回復のボタンが押された際の処理
     function healfunk(){
       console.log("回復されました")
-    }
-
-    function guardfunk(){
-      console.log("防御しました")
     }
 
     //ドローのボタンが押された際の処理
