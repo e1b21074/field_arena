@@ -91,11 +91,42 @@ public class AsyncFiled_Area {
   }
 
   @Async
-  public void HPAsyncEmitter(SseEmitter emitter, int roomid){
+  public void HPAsyncEmitter(SseEmitter emitter, int roomid, String userName) {
+    int user1Hp;
+    int user2Hp;
+    ArrayList<Hp> st_hps = hpMapper.selectByRoomId(roomid);
+    
+    //それぞれのユーザのHpの初期値を保存
+    //DBの上の方のユーザがuser1と仮定
+    user1Hp = st_hps.get(0).getHp();
+    user2Hp = st_hps.get(1).getHp();
+
     try{
       while(true){
         ArrayList<Hp> hps = hpMapper.selectByRoomId(roomid);
+        //HPの変動が無ければ少し待ってcontinuで次の繰り返しへ
+        if (user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) {
+          TimeUnit.MILLISECONDS.sleep(1000);
+          continue;
+        }
+
+        //変更があったということなので更新
+        user1Hp = hps.get(0).getHp();
+        user2Hp = hps.get(1).getHp();
+
+        //リストの2つ目のユーザ名を取得
+        String user2 = hps.get(1).getUserName();
+
+        //リストの２つ目のユーザ名とログインユーザ名が同じ場合リストの順番を変更
+        if (user2.equals(userName)) {
+          Hp tmp = hps.get(0);
+          hps.remove(0);
+          hps.add(tmp);
+        }
+
+        //データを送信
         emitter.send(hps);
+
         TimeUnit.MILLISECONDS.sleep(1000);
       }
     }catch (Exception e) {
