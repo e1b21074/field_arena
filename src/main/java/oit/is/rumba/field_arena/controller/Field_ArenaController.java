@@ -141,7 +141,7 @@ public class Field_ArenaController {
     // model.addAttribute("hp", hp);
     // return "hpTest.html";
     // }
-   
+
 
   @GetMapping("/cardUse")
   public String cardUse(@RequestParam String id,@RequestParam Integer roomid, Model model, Principal prin) {
@@ -200,9 +200,9 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/HPasync")
-  public SseEmitter HPasync(@RequestParam Integer roomid) {
+  public SseEmitter HPasync(@RequestParam Integer roomid,Principal prin) {
     final SseEmitter emitter = new SseEmitter();
-    this.asyncFiled_Area.HPAsyncEmitter(emitter,roomid);
+    this.asyncFiled_Area.HPAsyncEmitter(emitter,roomid,prin.getName());
     return emitter;
   }
 
