@@ -134,31 +134,30 @@ public class Field_ArenaController {
     return emitter;
   }
 
-    // @GetMapping("/hpTest")
-    // public String hp(Model model) {
-    // myHp.initHp();
-    // int hp = myHp.getHp();
-    // model.addAttribute("hp", hp);
-    // return "hpTest.html";
-    // }
-   
+  // @GetMapping("/hpTest")
+  // public String hp(Model model) {
+  // myHp.initHp();
+  // int hp = myHp.getHp();
+  // model.addAttribute("hp", hp);
+  // return "hpTest.html";
+  // }
 
   @GetMapping("/cardUse")
-  public String cardUse(@RequestParam String id,@RequestParam Integer roomid, Model model, Principal prin) {
+  public String cardUse(@RequestParam String id, @RequestParam Integer roomid, Model model, Principal prin) {
     Card card = cardMapper.selectCardById(Integer.parseInt(id));
 
     if (card.getCardAttribute().equals("武器")) {
-      attack(card,roomid,model, prin);
+      attack(card, roomid, model, prin);
     } else if (card.getCardAttribute().equals("防具")) {
-
+      block(card, roomid, model, prin);
     } else if (card.getCardAttribute().equals("回復")) {
-      heal(card,roomid, model, prin);
+      heal(card, roomid, model, prin);
     }
     return "game.html";
   }
 
   @GetMapping("/attack")
-  public String attack(Card card,int roomid,Model model, Principal prin) {
+  public String attack(Card card, int roomid, Model model, Principal prin) {
     // 敵のHP
     int roomsId = roomid;// Integer.parseInt(id);// 一旦定数->rommMapperを使用して受け取りたい
     String userName = prin.getName();
@@ -176,7 +175,7 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/heal")
-  public String heal(Card card,int roomid,Model model, Principal prin) {
+  public String heal(Card card, int roomid, Model model, Principal prin) {
     int roomsId = roomid;// Integer.parseInt(id);// 一旦定数->rommMapperを使用して受け取りたい
     String userName = prin.getName();
     Hp myHp = hpMapper.selectMyHp(roomsId, userName);
@@ -192,6 +191,22 @@ public class Field_ArenaController {
     return "game.html";
   }
 
+  @GetMapping("/block")
+  public String block(Card card, int roomid, Model model, Principal prin) {
+    int roomsId = roomid;
+    String userName = prin.getName();
+    Hp myHp = hpMapper.selectMyHp(roomsId, userName);
+    model.addAttribute("hp", myHp.getHp());
+    // 選択されたカードを削除する
+    playerHandMapper.deletePlayerHand(playerHandMapper.selecthandnum(userName, card.getId()).get(0).getId());
+    model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
+    Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
+    model.addAttribute("enemy", enemyHp);
+    model.addAttribute("roomsId", roomsId);
+
+    return "game.html";
+  }
+
   @GetMapping("/start")
   public SseEmitter start() {
     final SseEmitter emitter = new SseEmitter();
@@ -202,14 +217,14 @@ public class Field_ArenaController {
   @GetMapping("/HPasync")
   public SseEmitter HPasync(@RequestParam Integer roomid) {
     final SseEmitter emitter = new SseEmitter();
-    this.asyncFiled_Area.HPAsyncEmitter(emitter,roomid);
+    this.asyncFiled_Area.HPAsyncEmitter(emitter, roomid);
     return emitter;
   }
 
-  private ArrayList<Card> sort(ArrayList<Card> hand){
-    for(int i = 0; i < hand.size(); i++){
-      for(int j = 0; j < hand.size(); j++){
-        if(hand.get(i).getId() < hand.get(j).getId()){
+  private ArrayList<Card> sort(ArrayList<Card> hand) {
+    for (int i = 0; i < hand.size(); i++) {
+      for (int j = 0; j < hand.size(); j++) {
+        if (hand.get(i).getId() < hand.get(j).getId()) {
           Card tmp = hand.get(i);
           hand.set(i, hand.get(j));
           hand.set(j, tmp);
