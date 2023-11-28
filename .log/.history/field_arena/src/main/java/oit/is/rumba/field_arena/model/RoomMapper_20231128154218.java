@@ -31,8 +31,8 @@ public interface RoomMapper {
   @Select("select * from rooms where roomName=#{roomName} and isActive=true")
   Room checkByroomName(String roomName);
 
-  @Update("UPDATE ROOMS SET isActive=false, turns=#{turns} where id=#{id}")
-  void updateActiveById(int id, String turns);
+  @Update("UPDATE ROOMS SET isActive=false where id=#{id}")
+  void updateActiveById(int id);
 
   @Select("select turns from rooms where id=#{id}")
   String selectTurnsById(int id);

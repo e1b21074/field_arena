@@ -150,21 +150,12 @@ public class Field_ArenaController {
   public String cardUse(@RequestParam String id, @RequestParam Integer roomid, Model model, Principal prin) {
     Card card = cardMapper.selectCardById(Integer.parseInt(id));
 
-    if (card.getCardAttribute().equals("武器") && prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
+    if (card.getCardAttribute().equals("武器")) {
       attack(card, roomid, model, prin);
-    } else if (card.getCardAttribute().equals("防具") && !prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
+    } else if (card.getCardAttribute().equals("防具")) {
       block(card, roomid, model, prin);
-    } else if (card.getCardAttribute().equals("回復") && prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
+    } else if (card.getCardAttribute().equals("回復")) {
       heal(card, roomid, model, prin);
-    }else{
-      int roomsId = roomid;
-      String userName = prin.getName();
-      Hp myHp = hpMapper.selectMyHp(roomsId, userName);
-      model.addAttribute("hp", myHp.getHp());
-      model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
-      Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
-      model.addAttribute("enemy", enemyHp);
-      model.addAttribute("roomsId", roomsId);
     }
     return "game.html";
   }

@@ -16,7 +16,7 @@ CREATE TABLE rooms(
   user2 VARCHAR,
   usernum INT,
   isActive BOOLEAN NOT NULL,
-  turns VARCHAR
+  turns INT
 );
 
 CREATE TABLE userHp (
