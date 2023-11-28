@@ -108,7 +108,7 @@ public class Field_ArenaController {
   @GetMapping("/room")
   @Transactional
   public String create_room(@RequestParam String roomName, Principal prin, ModelMap model) {
-    if (roomMapper.checkByroomName(roomName)!=null) {
+    if (roomMapper.checkByroomName(roomName) != null) {
       model.addAttribute("AlreadyRoom", roomName);
       return "gamearea.html";
     }
