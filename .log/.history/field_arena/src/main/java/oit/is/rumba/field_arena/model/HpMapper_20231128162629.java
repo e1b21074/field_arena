@@ -29,6 +29,6 @@ public interface HpMapper {
   ArrayList<Hp> selectByRoomId(int roomid);
 
   @Select("select * from userHp where roomsid=#{roomid} and userName <> #{userName}" )
-  Hp selectByroomIdAndUsername(int roomid, String userName);
+  Hp selectByhp(int roomid, String userName);
 
 }

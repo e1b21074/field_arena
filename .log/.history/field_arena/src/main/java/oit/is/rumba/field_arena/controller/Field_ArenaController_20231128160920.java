@@ -85,29 +85,23 @@ public class Field_ArenaController {
 
   @GetMapping("/draw")
   public String draw(@RequestParam String roomid, ModelMap model, Principal prin) {
-    int roomsId = Integer.parseInt(roomid);// 一旦定数->rommMapperを使用して受け取りたい
-    String userName = prin.getName();
     ArrayList<Card> cards = cardMapper.selectAllCards();
     PlayerHand hand = new PlayerHand();
     Draw player = new Draw();
-    
-    if(prin.getName().equals(roomMapper.selectTurnsById(roomsId))){
-      hand.setUserName(prin.getName());
-      hand.setCard_id(player.getHand(cards).getId());
-      playerHandMapper.setPlayerHand(hand.getUserName(), hand.getCard_id());
-      Hp Hps = hpMapper.selectByroomIdAndUsername(roomsId, userName);
-      roomMapper.changeTurns(roomsId, Hps.getUserName());
-    }
+    hand.setUserName(prin.getName());
+    hand.setCard_id(player.getHand(cards).getId());
+    playerHandMapper.setPlayerHand(hand.getUserName(), hand.getCard_id());
     model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
 
     // HP
+    int roomsId = Integer.parseInt(roomid);// 一旦定数->rommMapperを使用して受け取りたい
+    String userName = prin.getName();
     Hp hp = hpMapper.selectMyHp(roomsId, userName);
     model.addAttribute("hp", hp.getHp());
     model.addAttribute("roomsId", roomsId);
     // 敵のHP
     Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
     model.addAttribute("enemy", enemyHp);
-    model.addAttribute("turns", roomMapper.selectTurnsById(roomsId));
     return "game.html";
   }
 
@@ -155,16 +149,14 @@ public class Field_ArenaController {
   @GetMapping("/cardUse")
   public String cardUse(@RequestParam String id, @RequestParam Integer roomid, Model model, Principal prin) {
     Card card = cardMapper.selectCardById(Integer.parseInt(id));
-    Hp Hps = hpMapper.selectByroomIdAndUsername(roomid, prin.getName());
 
     if (card.getCardAttribute().equals("武器") && prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
       attack(card, roomid, model, prin);
-      roomMapper.changeTurns(roomid, Hps.getUserName());
+      
     } else if (card.getCardAttribute().equals("防具") && !prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
       block(card, roomid, model, prin);
     } else if (card.getCardAttribute().equals("回復") && prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
       heal(card, roomid, model, prin);
-      roomMapper.changeTurns(roomid, Hps.getUserName());
     }else{
       int roomsId = roomid;
       String userName = prin.getName();
@@ -175,7 +167,6 @@ public class Field_ArenaController {
       model.addAttribute("enemy", enemyHp);
       model.addAttribute("roomsId", roomsId);
     }
-    model.addAttribute("turns", roomMapper.selectTurnsById(roomid));
     return "game.html";
   }
 
