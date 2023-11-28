@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface RoomMapper {
 
-  @Insert("INSERT INTO rooms (roomName,user1,usernum,isActive) VALUES (#{roomName},#{user1},1,true);")
+  @Insert("INSERT INTO rooms (roomName,user1,usernum,isActive,turns) VALUES (#{roomName},#{user1},1,true,1);")
   void insertName(String roomName, String user1);
 
   @Select("select * from rooms where isActive=true")
@@ -31,13 +31,10 @@ public interface RoomMapper {
   @Select("select * from rooms where roomName=#{roomName} and isActive=true")
   Room checkByroomName(String roomName);
 
-  @Update("UPDATE ROOMS SET isActive=false, turns=#{turns} where id=#{id}")
-  void updateActiveById(int id, String turns);
+  @Update("UPDATE ROOMS SET isActive=false where id=#{id}")
+  void updateActiveById(int id);
 
   @Select("select turns from rooms where id=#{id}")
   String selectTurnsById(int id);
-
-  @Update("UPDATE ROOMS SET turns=#{turns} where id=#{id}")
-  void changeTurns(int id, String turns);
 
 }

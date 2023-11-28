@@ -37,7 +37,4 @@ public interface RoomMapper {
   @Select("select turns from rooms where id=#{id}")
   String selectTurnsById(int id);
 
-  @Update("UPDATE ROOMS SET turns=#{turns} where id=#{id}")
-  void changeTurns(int id, String turns);
-
 }
