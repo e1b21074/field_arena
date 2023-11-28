@@ -35,7 +35,9 @@
     </ul>
   </div>
 
-
+    <div th:if="${AlreadyRoom}">
+      既に[[${AlreadyRoom}]]は存在しています
+    </div>
     <p>
       <form action="/room" method="get">
         <input type="textarea" name="roomName" />

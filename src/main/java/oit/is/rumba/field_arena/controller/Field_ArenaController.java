@@ -108,6 +108,10 @@ public class Field_ArenaController {
   @GetMapping("/room")
   @Transactional
   public String create_room(@RequestParam String roomName, Principal prin, ModelMap model) {
+    if (roomMapper.checkByroomName(roomName)!=null) {
+      model.addAttribute("AlreadyRoom", roomName);
+      return "gamearea.html";
+    }
     asyncFiled_Area.createRoom(roomName, prin.getName());
     model.addAttribute("room", roomName);
     String userName = prin.getName();

@@ -27,4 +27,7 @@ public interface RoomMapper {
   @Select("select * from rooms where user1=#{userName} and isActive=true" )
   int selectIdByUser1Name(String userName);
 
+  @Select("select * from rooms where roomName=#{roomName} and isActive=true")
+  Room checkByroomName(String roomName);
+
 }
