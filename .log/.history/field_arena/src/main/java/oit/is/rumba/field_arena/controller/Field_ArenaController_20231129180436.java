@@ -90,11 +90,10 @@ public class Field_ArenaController {
     ArrayList<Card> cards = cardMapper.selectAllCards();
     PlayerHand hand = new PlayerHand();
     Draw player = new Draw();
-    int handnum = playerHandMapper.selectCardByUserName(userName).size();
     
     if(prin.getName().equals(roomMapper.selectTurnsById(roomsId))){
-      if(handnum >= 10){
-        playerHandMapper.deletePlayerHand(playerHandMapper.selecthandByUserName(userName).get(0).getId());
+      if(playerHandMapper.selectCardByUserName(userName).size() >= 10 ){
+        playerHandMapper.deletePlayerHand(playerHandMapper.selectCardByUserName(userName).get(0).getId());
       }
       hand.setUserName(prin.getName());
       hand.setCard_id(player.getHand(cards).getId());
