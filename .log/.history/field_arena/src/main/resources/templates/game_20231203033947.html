@@ -70,7 +70,7 @@
     <ul>
       <div style="text-align: center">
         <div th:each="playerhand : ${playerhand}">
-          <a th:href="@{/cardUse(id=${playerhand.id},roomid=${roomsId})}">
+          <div th:href="@{/cardUse(id=${playerhand.id},roomid=${roomsId})}">
             <div th:if="${playerhand.id} == 1"><img id="choice" src="img/武器1.png" width="200" height="200"></div>
             <div th:if="${playerhand.id} == 2"><img id="choice" src="img/武器2.png" width="200" height="200"></div>
             <div th:if="${playerhand.id} == 3"><img id="choice" src="img/武器3.png" width="200" height="200"></div>
@@ -101,7 +101,7 @@
             <div th:if="${playerhand.id} == 28"><img id="choice" src="img/回復8.png" width="200" height="200"></div>
             <div th:if="${playerhand.id} == 29"><img id="choice" src="img/回復9.png" width="200" height="200"></div>
             <div th:if="${playerhand.id} == 30"><img id="choice" src="img/回復10.png" width="200" height="200"></div>
-          </a>
+          </div>
         </div>
       </div>
     </ul>
