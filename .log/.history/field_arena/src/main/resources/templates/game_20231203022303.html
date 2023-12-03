@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    h2 {
+      text-align: center;
+    }
+
+    h1 {
+      text-align: center;
+
+      position: absolute;
+      bottom: 0;
+    }
+  </style>
+  <title>カードゲーム</title>
+  <script>
+    window.onload=function(){
+      const params = new URLSearchParams(window.location.search);
+      const paramName = 'roomid';
+      const paramValue = params.get(paramName);
+      var sse = new EventSource('/HPasync?roomid='+paramValue);
+        sse.onmessage=function(event){
+          var hp_list=JSON.parse(event.data);
+          //自身のユーザ名とhpの取得
+          var myName=hp_list[0].userName;
+          var myHpdata = hp_list[0].hp;
+
+          //相手のユーザ名とhpの取得
+          var enemyName=hp_list[1].userName;
+          var enemyHpdata = hp_list[1].hp;
+
+          //自身と相手のユーザ名とhpの表示場所の取得
+          var myHp=document.getElementById("myHp");
+          var enemyHp=document.getElementById("enemyHp");
+
+          //自身と相手のユーザ名とデータを表示
+          myHp.innerHTML="<h2>"+myName+"のHP:"+myHpdata+"</h2>";
+          enemyHp.innerHTML= "<h2>" + enemyName + "のHP:" + enemyHpdata + "</h2>";
+        }
+    }
+
+  </script>
+</head>
+
+<body>
+  <div id="myHp">
+    <h2><span sec:authentication="name"></span> のHP : <span th:if="${hp}" th:text="${hp}"></span></h2>
+  </div>
+  <div id="enemyHp">
+    <h2><span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}"
+      th:text="${enemy.hp}"></span></h2>
+  </div>
+  <div th:if="${turns}">[[${turns}]]のターン</div>
+  <div>
+    <h2>
+      <button onclick="drawfunk()">ドロー</button>
+      <button onclick="location.href='/gamearea'">戻る</button>
+      <button onclick="location.href='/logout'">ログアウト</button>
+    </h2>
+
+  </div>
+
+  <div id="HP"></div>
+
+  <div>
+    <ul>
+      <h1>
+        <li th:each="playerhand : ${playerhand}">
+          <a th:href="@{/cardUse(id=${playerhand.id},roomid=${roomsId})}">
+            <img id="choice" src="" width="100" height="100">
+            <script>
+              var pics_src=new Array("img/武器.png", "img/回復.png", "img/防具.png");
+              const cardid = 'cardId';
+              var num=0;
+
+              function choicePicture(){
+                if(cardid <= 10){
+                  num = 0;
+                }else if(cardid >= 20){
+                  num = 1;
+                }else{
+                  num = 2;
+                }
+                document.getElementById("choice").src=pics_src[num];
+              }
+            </script>
+            カード属性:[[${playerhand.cardAttribute}]]
+            強さ:[[${playerhand.cardStrong}]]</a></li>
+      </h1>
+    </ul>
+  </div>
+
+  <!--以下はjavascriptで各操作時に部屋のidをパラメータとして渡す-->
+  <script>
+    //ダメージのボタンが押された際の処理
+    function attackfunk() {
+      console.log("攻撃しました")
+    }
+
+    //回復のボタンが押された際の処理
+    function healfunk(){
+      console.log("回復されました")
+    }
+
+    function guardfunk(){
+      console.log("防御しました")
+    }
+
+    //ドローのボタンが押された際の処理
+    function drawfunk() {
+      //現在のパラメータを取得
+      const params = new URLSearchParams(window.location.search);
+      const paramName = 'roomid';
+      const paramValue = params.get(paramName);
+      //パラメータを含めたUrlを生成
+      var href = "/draw?roomid=";
+      window.location.href = href + paramValue;
+    }
+
+  </script>
+</body>
+
+</html>
