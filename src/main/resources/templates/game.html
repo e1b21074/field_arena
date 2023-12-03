@@ -24,6 +24,7 @@
       const paramValue = params.get(paramName);
       var sse = new EventSource('/HPasync?roomid='+paramValue);
         sse.onmessage=function(event){
+          window.location.href="/reRoad?roomid="+paramValue
           var hp_list=JSON.parse(event.data);
           //自身のユーザ名とhpの取得
           var myName=hp_list[0].userName;
@@ -54,7 +55,7 @@
     <h2><span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}"
       th:text="${enemy.hp}"></span></h2>
   </div>
-  <div th:if="${turns}">[[${turns}]]のターン</div>
+  <div id="turn"><div th:if="${turns}">[[${turns}]]のターン</div></div>
   <div>
     <h2>
       <button onclick="drawfunk()">ドロー</button>

@@ -90,7 +90,7 @@ public class Field_ArenaController {
     ArrayList<Card> cards = cardMapper.selectAllCards();
     PlayerHand hand = new PlayerHand();
     Draw player = new Draw();
-    
+
     if(prin.getName().equals(roomMapper.selectTurnsById(roomsId))){
       hand.setUserName(prin.getName());
       hand.setCard_id(player.getHand(cards).getId());
@@ -256,5 +256,12 @@ public class Field_ArenaController {
     }
     return hand;
   }
+
+  @GetMapping("/reRoad")
+  public String reRoad(@RequestParam Integer roomid){
+    return "game.html";
+  }
+
+
 
 }
