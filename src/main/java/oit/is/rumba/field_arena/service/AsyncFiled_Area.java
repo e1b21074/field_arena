@@ -20,6 +20,7 @@ public class AsyncFiled_Area {
   boolean Room_enter = false; // 入室用のフラグ
   int cnt = 0;
   int ent_cnt = 0; // 入室を表示した回数
+  int turn_flag = 0;
 
   private final Logger logger = LoggerFactory.getLogger(AsyncFiled_Area.class);
 
@@ -96,17 +97,20 @@ public class AsyncFiled_Area {
     int user1Hp;
     int user2Hp;
     ArrayList<Hp> st_hps = hpMapper.selectByRoomId(roomid);
+    String turn="";
 
     // それぞれのユーザのHpの初期値を保存
     // DBの上の方のユーザがuser1と仮定
     user1Hp = st_hps.get(0).getHp();
     user2Hp = st_hps.get(1).getHp();
+    turn = roomMapper.selectTurnsById(roomid);
 
     try {
       while (true) {
         ArrayList<Hp> hps = hpMapper.selectByRoomId(roomid);
+        String tmp_turn=roomMapper.selectTurnsById(roomid);
         // HPの変動が無ければ少し待ってcontinuで次の繰り返しへ
-        if (user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) {
+        if ((user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) && tmp_turn.equals(turn) ) {
           TimeUnit.MILLISECONDS.sleep(1000);
           continue;
         }
@@ -114,6 +118,7 @@ public class AsyncFiled_Area {
         // 変更があったということなので更新
         user1Hp = hps.get(0).getHp();
         user2Hp = hps.get(1).getHp();
+        turn=tmp_turn;
 
         // リストの2つ目のユーザ名を取得
         String user2 = hps.get(1).getUserName();
@@ -137,4 +142,22 @@ public class AsyncFiled_Area {
     }
     System.out.println("asyncRoom complete");
   }
+
+  /*
+  @Async
+  public void TurnsAsyncEmitter(SseEmitter emitter, int roomid) {
+    String turn;
+    try{
+      while (true) {
+        turn = roomMapper.selectTurnsById(roomid);
+        emitter.send(turn);
+        TimeUnit.MILLISECONDS.sleep(1000);
+      }
+    }catch (Exception e) {
+      logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());
+    } finally {
+      emitter.complete();
+    }
+    System.out.println("asynTurn complete");
+  }*/
 }
