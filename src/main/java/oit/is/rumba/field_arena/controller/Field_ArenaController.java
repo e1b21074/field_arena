@@ -92,8 +92,8 @@ public class Field_ArenaController {
     PlayerHand hand = new PlayerHand();
     Draw player = new Draw();
     int handnum = playerHandMapper.selectCardByUserName(userName).size();
-    if(prin.getName().equals(roomMapper.selectTurnsById(roomsId))){
-      if(handnum >= 10){
+    if (prin.getName().equals(roomMapper.selectTurnsById(roomsId))) {
+      if (handnum >= 10) {
         playerHandMapper.deletePlayerHand(playerHandMapper.selecthandByUserName(userName).get(0).getId());
       }
       hand.setUserName(prin.getName());
@@ -169,7 +169,7 @@ public class Field_ArenaController {
     } else if (card.getCardAttribute().equals("回復") && prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
       heal(card, roomid, model, prin);
       roomMapper.changeTurns(roomid, Hps.getUserName());
-    }else{
+    } else {
       int roomsId = roomid;
       String userName = prin.getName();
       Hp myHp = hpMapper.selectMyHp(roomsId, userName);
@@ -198,6 +198,13 @@ public class Field_ArenaController {
     playerHandMapper.deletePlayerHand(playerHandMapper.selecthandnum(userName, card.getId()).get(0).getId());
     model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
     model.addAttribute("roomsId", roomsId);
+    // 勝敗
+    if (enemyHp.getHp() <= 0) {
+      model.addAttribute("result", "あなたの勝ちです！");
+    } else if (myHp.getHp() <= 0) {
+      model.addAttribute("result", "あなたの負けです！");
+    }
+
     return "game.html";
   }
 
@@ -261,37 +268,43 @@ public class Field_ArenaController {
     return hand;
   }
 
-  //リロード用のメソッド
+  // リロード用のメソッド
   @GetMapping("/reRoad")
-  public String reRoad(@RequestParam Integer roomid, Model model,Principal prin) {
+  public String reRoad(@RequestParam Integer roomid, Model model, Principal prin) {
     int roomsId = roomid;
 
-    //ユーザ名の取得
+    // ユーザ名の取得
     String userName = prin.getName();
 
-    //自身のHpの取得
+    // 自身のHpの取得
     Hp myHp = hpMapper.selectMyHp(roomsId, userName);
 
-    //自身のHpをthemyselefに登録
+    // 自身のHpをthemyselefに登録
     model.addAttribute("hp", myHp.getHp());
 
-    //自身の手札の登録
+    // 自身の手札の登録
     model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
 
-    //相手のHpの取得
+    // 相手のHpの取得
     Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
 
-    //相手のHpの登録
+    // 相手のHpの登録
     model.addAttribute("enemy", enemyHp);
 
-    //roomidの登録
+    // roomidの登録
     model.addAttribute("roomsId", roomsId);
 
-    //ターンの登録
+    // ターンの登録
     model.addAttribute("turns", roomMapper.selectTurnsById(roomid));
+
+    // 勝敗
+    if (enemyHp.getHp() <= 0) {
+      model.addAttribute("result", "あなたの勝ちです！");
+    } else if (myHp.getHp() <= 0) {
+      model.addAttribute("result", "あなたの負けです！");
+    }
+
     return "game.html";
   }
-
-
 
 }
