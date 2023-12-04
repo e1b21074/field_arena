@@ -24,27 +24,22 @@
       const paramValue = params.get(paramName);
       var sse = new EventSource('/HPasync?roomid='+paramValue);
         sse.onmessage=function(event){
-
-          //ページの再読み込み
-          window.location.href="/reRoad?roomid="+paramValue
-
-
-          //var hp_list=JSON.parse(event.data);
+          var hp_list=JSON.parse(event.data);
           //自身のユーザ名とhpの取得
-          //var myName=hp_list[0].userName;
-          //var myHpdata = hp_list[0].hp;
+          var myName=hp_list[0].userName;
+          var myHpdata = hp_list[0].hp;
 
           //相手のユーザ名とhpの取得
-          //var enemyName=hp_list[1].userName;
-          //var enemyHpdata = hp_list[1].hp;
+          var enemyName=hp_list[1].userName;
+          var enemyHpdata = hp_list[1].hp;
 
           //自身と相手のユーザ名とhpの表示場所の取得
-          //var myHp=document.getElementById("myHp");
-          //var enemyHp=document.getElementById("enemyHp");
+          var myHp=document.getElementById("myHp");
+          var enemyHp=document.getElementById("enemyHp");
 
           //自身と相手のユーザ名とデータを表示
-          //myHp.innerHTML="<h2>"+myName+"のHP:"+myHpdata+"</h2>";
-          //enemyHp.innerHTML= "<h2>" + enemyName + "のHP:" + enemyHpdata + "</h2>";
+          myHp.innerHTML="<h2>"+myName+"のHP:"+myHpdata+"</h2>";
+          enemyHp.innerHTML= "<h2>" + enemyName + "のHP:" + enemyHpdata + "</h2>";
         }
     }
 
@@ -59,7 +54,7 @@
     <h2><span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}"
       th:text="${enemy.hp}"></span></h2>
   </div>
-  <div id="turn"><div th:if="${turns}">[[${turns}]]のターン</div></div>
+  <div th:if="${turns}">[[${turns}]]のターン</div>
   <div>
     <h2>
       <button onclick="drawfunk()">ドロー</button>

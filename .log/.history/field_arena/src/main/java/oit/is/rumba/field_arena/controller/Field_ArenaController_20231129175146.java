@@ -80,7 +80,6 @@ public class Field_ArenaController {
     // 敵のHP
     Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
     model.addAttribute("enemy", enemyHp);
-    model.addAttribute("turns", roomMapper.selectTurnsById(roomid));
     return "game.html";
   }
 
@@ -91,10 +90,10 @@ public class Field_ArenaController {
     ArrayList<Card> cards = cardMapper.selectAllCards();
     PlayerHand hand = new PlayerHand();
     Draw player = new Draw();
-    int handnum = playerHandMapper.selectCardByUserName(userName).size();
+    
     if(prin.getName().equals(roomMapper.selectTurnsById(roomsId))){
-      if(handnum >= 10){
-        playerHandMapper.deletePlayerHand(playerHandMapper.selecthandByUserName(userName).get(0).getId());
+      if(playerHandMapper.selectCardByUserName(userName).size() >= 10 ){
+        
       }
       hand.setUserName(prin.getName());
       hand.setCard_id(player.getHand(cards).getId());
@@ -260,38 +259,5 @@ public class Field_ArenaController {
     }
     return hand;
   }
-
-  //リロード用のメソッド
-  @GetMapping("/reRoad")
-  public String reRoad(@RequestParam Integer roomid, Model model,Principal prin) {
-    int roomsId = roomid;
-
-    //ユーザ名の取得
-    String userName = prin.getName();
-
-    //自身のHpの取得
-    Hp myHp = hpMapper.selectMyHp(roomsId, userName);
-
-    //自身のHpをthemyselefに登録
-    model.addAttribute("hp", myHp.getHp());
-
-    //自身の手札の登録
-    model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
-
-    //相手のHpの取得
-    Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
-
-    //相手のHpの登録
-    model.addAttribute("enemy", enemyHp);
-
-    //roomidの登録
-    model.addAttribute("roomsId", roomsId);
-
-    //ターンの登録
-    model.addAttribute("turns", roomMapper.selectTurnsById(roomid));
-    return "game.html";
-  }
-
-
 
 }

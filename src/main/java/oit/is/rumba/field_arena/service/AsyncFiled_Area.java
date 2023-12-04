@@ -110,7 +110,7 @@ public class AsyncFiled_Area {
         ArrayList<Hp> hps = hpMapper.selectByRoomId(roomid);
         String tmp_turn=roomMapper.selectTurnsById(roomid);
         // HPの変動が無ければ少し待ってcontinuで次の繰り返しへ
-        if ((user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) ||tmp_turn.equals(turn) ) {
+        if ((user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) && tmp_turn.equals(turn) ) {
           TimeUnit.MILLISECONDS.sleep(1000);
           continue;
         }
