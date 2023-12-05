@@ -200,10 +200,8 @@ public class Field_ArenaController {
     model.addAttribute("roomsId", roomsId);
     // 勝敗
     if (enemyHp.getHp() <= 0) {
-      HandReset(userName);
       model.addAttribute("result", "あなたの勝ちです！");
     } else if (myHp.getHp() <= 0) {
-      HandReset(userName);
       model.addAttribute("result", "あなたの負けです！");
     }
 
