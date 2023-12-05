@@ -301,4 +301,9 @@ public class Field_ArenaController {
     }
   }
 
+  @GetMapping("/Wait")
+  public String Wait() {
+    return "attackWait.html";
+  }
+
 }
