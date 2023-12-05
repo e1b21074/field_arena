@@ -16,7 +16,7 @@ public interface HpMapper {
   @Select("select * from userHp where roomsId=#{roomsId} and userName <> #{userName}")
   Hp selectEnemyHp(int roomsId, String userName);
 
-  @Insert("INSERT INTO userHp (roomsId,userName,hp) VALUES (#{roomsId},#{user},10);")
+  @Insert("INSERT INTO userHp (roomsId,userName,hp,attackFlag) VALUES (#{roomsId},#{user},10,false);")
   void createHp(int roomsId, String user);
 
   @Update("UPDATE userHp SET hp=#{hp} WHERE roomsId = #{roomsId} AND userName = #{userName}")
@@ -25,10 +25,19 @@ public interface HpMapper {
   @Update("UPDATE userHp SET hp=#{hp} WHERE roomsId = #{roomsId} AND userName <> #{userName}")
   void updateEnemyHp(int roomsId, String userName, int hp);
 
-  @Select("select * from userHp where roomsid=#{roomid}" )
+  @Select("select * from userHp where roomsid=#{roomid}")
   ArrayList<Hp> selectByRoomId(int roomid);
 
-  @Select("select * from userHp where roomsid=#{roomid} and userName <> #{userName}" )
+  @Select("select * from userHp where roomsid=#{roomid} and userName <> #{userName}")
   Hp selectByroomIdAndUsername(int roomid, String userName);
+
+  @Update("UPDATE userHp SET attackFlag=true WHERE roomsId = #{roomsId} AND userName <> #{userName}")
+  void updateAttackTrue(int roomsId, String userName);
+
+  @Update("UPDATE userHp SET attackFlag=false WHERE roomsId = #{roomsId} AND userName = #{userName}")
+  void updateAttackFalse(int roomsId, String userName);
+
+  @Select("select attackFlag from userHp where roomsId = #{roomsId} AND userName = #{userName}")
+  int selectFlag(int roomsId, String userName);
 
 }

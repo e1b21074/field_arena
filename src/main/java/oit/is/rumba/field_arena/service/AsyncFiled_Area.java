@@ -107,7 +107,8 @@ public class AsyncFiled_Area {
     int user1Hp;
     int user2Hp;
     ArrayList<Hp> st_hps = hpMapper.selectByRoomId(roomid);
-    String turn="";
+    String turn = "";
+    int attackFlag = 0;
 
     // それぞれのユーザのHpの初期値を保存
     // DBの上の方のユーザがuser1と仮定
@@ -118,10 +119,12 @@ public class AsyncFiled_Area {
     try {
       while (true) {
         ArrayList<Hp> hps = hpMapper.selectByRoomId(roomid);
-        String tmp_turn=roomMapper.selectTurnsById(roomid);
+        String tmp_turn = roomMapper.selectTurnsById(roomid);
+        attackFlag = hpMapper.selectFlag(roomid, userName);
+        System.out.println("ok");
         // HPの変動が無ければ少し待ってcontinuで次の繰り返しへ
-        if ((user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) && tmp_turn.equals(turn) ) {
-          TimeUnit.MILLISECONDS.sleep(1000);
+        if ((user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) && tmp_turn.equals(turn) && attackFlag==0) {
+          TimeUnit.MILLISECONDS.sleep(500);
           continue;
         }
 
@@ -130,18 +133,9 @@ public class AsyncFiled_Area {
         user2Hp = hps.get(1).getHp();
         turn=tmp_turn;
 
-        // リストの2つ目のユーザ名を取得
-        String user2 = hps.get(1).getUserName();
-
-        // リストの２つ目のユーザ名とログインユーザ名が同じ場合リストの順番を変更
-        if (user2.equals(userName)) {
-          Hp tmp = hps.get(0);
-          hps.remove(0);
-          hps.add(tmp);
-        }
-
+        System.out.println(userName+"ok");
         // データを送信
-        emitter.send(hps);
+        emitter.send(attackFlag);
 
         TimeUnit.MILLISECONDS.sleep(1000);
       }
@@ -150,7 +144,7 @@ public class AsyncFiled_Area {
     } finally {
       emitter.complete();
     }
-    System.out.println("asyncRoom complete");
+    System.out.println("HPAsyncEmitter complete");
   }
 
   /*

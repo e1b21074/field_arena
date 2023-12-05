@@ -23,7 +23,8 @@ CREATE TABLE userHp (
   id IDENTITY,
   roomsId INT,
   userName VARCHAR NOT NULL,
-  hp INT
+  hp INT,
+  attackFlag BOOLEAN NOT NULL
 );
 
 CREATE TABLE playerHand (
