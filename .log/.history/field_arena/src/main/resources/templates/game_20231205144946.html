@@ -71,12 +71,10 @@
 
   </div>
 
-  <center>
-    <div th:if="${result}">
-      [[${result}]]
-      <button onclick="location.href='/gamearea'">ゲーム終了</button>
-    </div>
-  </center>
+  <div th:if="${result}">
+    [[${result}]]
+    <button onclick="location.href='/gamearea'">ゲーム終了</button>
+  </div>
 
   <div id="HP"></div>
 

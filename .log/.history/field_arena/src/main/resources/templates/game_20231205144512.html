@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     h2 {
-      text-align: center;
+      text-align: nobr;
     }
 
     h1 {
-      text-align: center;
+      text-align: nobr;
 
       position: absolute;
       bottom: 0;
@@ -60,7 +60,7 @@
         th:text="${enemy.hp}"></span></h2>
   </div>
   <div id="turn">
-    <h2 th:if="${turns}">[[${turns}]]のターン</div>
+    <div th:if="${turns}">[[${turns}]]のターン</div>
   </div>
   <div>
     <h2>
@@ -71,12 +71,10 @@
 
   </div>
 
-  <center>
-    <div th:if="${result}">
-      [[${result}]]
-      <button onclick="location.href='/gamearea'">ゲーム終了</button>
-    </div>
-  </center>
+  <div th:if="${result}">
+    [[${result}]]
+    <button onclick="location.href='/gamearea'">ゲーム終了</button>
+  </div>
 
   <div id="HP"></div>
 

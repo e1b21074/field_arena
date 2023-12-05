@@ -60,7 +60,7 @@
         th:text="${enemy.hp}"></span></h2>
   </div>
   <div id="turn">
-    <h2 th:if="${turns}">[[${turns}]]のターン</div>
+    <div th:if="${turns}">[[${turns}]]のターン</div>
   </div>
   <div>
     <h2>
@@ -71,20 +71,19 @@
 
   </div>
 
-  <center>
-    <div th:if="${result}">
-      [[${result}]]
-      <button onclick="location.href='/gamearea'">ゲーム終了</button>
-    </div>
-  </center>
+  <div th:if="${result}">
+    [[${result}]]
+    <button onclick="location.href='/gamearea'">ゲーム終了</button>
+  </div>
 
   <div id="HP"></div>
 
   <div>
     <ul>
-        <nobr th:each="playerhand : ${playerhand}">
+      <div style="text-align: center">
+        <div th:each="playerhand : ${playerhand}">
           <a th:href="@{/cardUse(id=${playerhand.id},roomid=${roomsId})}">
-            <nobr style="text-align: center">
+            <div style="text-align: center">
               <nobr th:if="${playerhand.id} == 1"><img src="img/武器1.png" width="200" height="200"></nobr>
               <nobr th:if="${playerhand.id} == 2"><img src="img/武器2.png" width="200" height="200"></nobr>
               <nobr th:if="${playerhand.id} == 3"><img src="img/武器3.png" width="200" height="200"></nobr>
@@ -115,9 +114,10 @@
               <nobr th:if="${playerhand.id} == 28"><img src="img/回復8.png" width="200" height="200"></nobr>
               <nobr th:if="${playerhand.id} == 29"><img src="img/回復9.png" width="200" height="200"></nobr>
               <nobr th:if="${playerhand.id} == 30"><img src="img/回復10.png" width="200" height="200"></nobr>
-            </nobr>
+            </div>
           </a>
-        </nobr>
+        </div>
+      </div>
     </ul>
   </div>
 
