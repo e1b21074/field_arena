@@ -164,6 +164,7 @@ public class Field_ArenaController {
     if (card.getCardAttribute().equals("武器") && prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
       attack(card, roomid, model, prin);
       roomMapper.changeTurns(roomid, Hps.getUserName());
+      return "attackWait.html";
     } else if (card.getCardAttribute().equals("防具") && !prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
       block(card, roomid, model, prin);
     } else if (card.getCardAttribute().equals("回復") && prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
@@ -185,29 +186,11 @@ public class Field_ArenaController {
 
   @GetMapping("/attack")
   public String attack(Card card, int roomid, Model model, Principal prin) {
-    // 敵のHP
-    int roomsId = roomid;// Integer.parseInt(id);// 一旦定数->rommMapperを使用して受け取りたい
+    int roomsId = roomid;
     String userName = prin.getName();
-    Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);// 同じルームの自分の名前じゃないプレイヤーのHP
-    enemyHp.minusHp(card.getCardStrong());
-    hpMapper.updateEnemyHp(roomsId, userName, enemyHp.getHp());
-    model.addAttribute("enemy", enemyHp);
-    // 自分のHP
-    Hp myHp = hpMapper.selectMyHp(roomsId, userName);
-    model.addAttribute("hp", myHp.getHp());
-    playerHandMapper.deletePlayerHand(playerHandMapper.selecthandnum(userName, card.getId()).get(0).getId());
-    model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
-    model.addAttribute("roomsId", roomsId);
-    // 勝敗
-    if (enemyHp.getHp() <= 0) {
-      HandReset(userName);
-      model.addAttribute("result", "あなたの勝ちです！");
-    } else if (myHp.getHp() <= 0) {
-      HandReset(userName);
-      model.addAttribute("result", "あなたの負けです！");
-    }
+    hpMapper.updateAttackTrue(roomsId, userName);
 
-    return "game.html";
+    return "attackWait.html";
   }
 
   @GetMapping("/heal")
