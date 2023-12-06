@@ -166,7 +166,6 @@ public class Field_ArenaController {
       roomMapper.changeTurns(roomid, Hps.getUserName());
       return "attackWait.html";
     } else if (card.getCardAttribute().equals("防具") && !prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
-      block(card, roomid, model, prin);
     } else if (card.getCardAttribute().equals("回復") && prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
       heal(card, roomid, model, prin);
       roomMapper.changeTurns(roomid, Hps.getUserName());
@@ -211,9 +210,10 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/block")
-  public String block(Card card, int roomid, Model model, Principal prin) {
+  public String block(@RequestParam Integer id, @RequestParam Integer roomid, Model model, Principal prin) {
     int roomsId = roomid;
     String userName = prin.getName();
+    Card card = cardMapper.selectCardById(id);
     Hp myHp = hpMapper.selectMyHp(roomsId, userName);
     model.addAttribute("hp", myHp.getHp());
     // 選択されたカードを削除する
@@ -223,6 +223,26 @@ public class Field_ArenaController {
     model.addAttribute("enemy", enemyHp);
     model.addAttribute("roomsId", roomsId);
 
+    //相手の攻撃の強さを取得
+    int attackPoint = myHp.getAttackPoint();
+
+    //防御札の強さを取得
+    int blockPoint = card.getCardStrong();
+
+    //防御札の強さ分攻撃の強さを減らす
+    if (attackPoint < blockPoint) {
+      attackPoint = 0;
+    } else {
+      attackPoint -= blockPoint;
+    }
+
+    myHp.setAttackFlag(false);
+    myHp.setAttackPoint(attackPoint);
+
+    //防御したことをDBに反映
+    hpMapper.updateAttackFalse(roomsId, userName, attackPoint);
+
+    model.addAttribute("blockPoint", blockPoint);
     return "game.html";
   }
 
@@ -302,21 +322,15 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/Wait")
-  public String Wait(Model model, Principal prin) {
+  public String Wait(@RequestParam Integer roomid, Model model, Principal prin) {
     int cardId = 0;
     //ユーザ名を取得
     String userName = prin.getName();
     //手札を取得
-    ArrayList<Card> hands = sort(playerHandMapper.selectCardByUserName(userName));
+    ArrayList<Card> hands = sort(playerHandMapper.selectBlockCardByUserName(userName));
 
-    //防御札以外を見つけて一覧から削除
-    for (int i = 0; i < hands.size(); i++) {
-      cardId = hands.get(i).getId();
-      if (!(cardId >= 11 && cardId <= 20)) {
-        hands.remove(i);
-      }
-    }
     model.addAttribute("playerhand", hands);
+    model.addAttribute("roomsId", roomid);
 
     return "blockConfirmation.html";
   }

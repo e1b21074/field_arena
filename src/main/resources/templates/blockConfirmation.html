@@ -33,7 +33,7 @@
   <div>
     <ul>
       <nobr th:each="playerhand : ${playerhand}">
-        <a th:href="@{/cardUse(id=${playerhand.id},roomid=${roomsId})}">
+        <a th:href="@{/block(id=${playerhand.id},roomid=${roomsId})}">
           <nobr style="text-align: center">
             <nobr th:if="${playerhand.id} == 11"><img src="img/防具1.png" width="200" height="200"></nobr>
             <nobr th:if="${playerhand.id} == 12"><img src="img/防具2.png" width="200" height="200"></nobr>

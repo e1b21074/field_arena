@@ -34,8 +34,8 @@ public interface HpMapper {
   @Update("UPDATE userHp SET attackFlag=true,attackPoint=#{attackPoint} WHERE roomsId = #{roomsId} AND userName <> #{userName}")
   void updateAttackTrue(int roomsId, String userName,int attackPoint);
 
-  @Update("UPDATE userHp SET attackFlag=false WHERE roomsId = #{roomsId} AND userName = #{userName}")
-  void updateAttackFalse(int roomsId, String userName);
+  @Update("UPDATE userHp SET attackFlag=false,attackPoint=#{attackPoint} WHERE roomsId = #{roomsId} AND userName = #{userName}")
+  void updateAttackFalse(int roomsId, String userName,int attackPoint);
 
   @Select("select attackFlag from userHp where roomsId = #{roomsId} AND userName = #{userName}")
   int selectFlag(int roomsId, String userName);
