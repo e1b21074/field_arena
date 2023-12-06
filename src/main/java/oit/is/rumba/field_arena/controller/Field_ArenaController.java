@@ -188,7 +188,7 @@ public class Field_ArenaController {
   public String attack(Card card, int roomid, Model model, Principal prin) {
     int roomsId = roomid;
     String userName = prin.getName();
-    hpMapper.updateAttackTrue(roomsId, userName);
+    hpMapper.updateAttackTrue(roomsId, userName,card.getCardStrong());
 
     return "attackWait.html";
   }
