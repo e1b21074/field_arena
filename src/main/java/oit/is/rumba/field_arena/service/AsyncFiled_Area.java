@@ -121,7 +121,6 @@ public class AsyncFiled_Area {
         ArrayList<Hp> hps = hpMapper.selectByRoomId(roomid);
         String tmp_turn = roomMapper.selectTurnsById(roomid);
         attackFlag = hpMapper.selectFlag(roomid, userName);
-        System.out.println("ok");
         // HPの変動が無ければ少し待ってcontinuで次の繰り返しへ
         if ((user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) && tmp_turn.equals(turn) && attackFlag==0) {
           TimeUnit.MILLISECONDS.sleep(500);
@@ -131,9 +130,8 @@ public class AsyncFiled_Area {
         // 変更があったということなので更新
         user1Hp = hps.get(0).getHp();
         user2Hp = hps.get(1).getHp();
-        turn=tmp_turn;
-
-        System.out.println(userName+"ok");
+        turn = tmp_turn;
+        
         // データを送信
         emitter.send(attackFlag);
 
@@ -147,21 +145,5 @@ public class AsyncFiled_Area {
     System.out.println("HPAsyncEmitter complete");
   }
 
-  /*
-  @Async
-  public void TurnsAsyncEmitter(SseEmitter emitter, int roomid) {
-    String turn;
-    try{
-      while (true) {
-        turn = roomMapper.selectTurnsById(roomid);
-        emitter.send(turn);
-        TimeUnit.MILLISECONDS.sleep(1000);
-      }
-    }catch (Exception e) {
-      logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());
-    } finally {
-      emitter.complete();
-    }
-    System.out.println("asynTurn complete");
-  }*/
+
 }

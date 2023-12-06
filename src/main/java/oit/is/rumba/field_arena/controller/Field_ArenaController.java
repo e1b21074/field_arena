@@ -302,8 +302,23 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/Wait")
-  public String Wait() {
-    return "attackWait.html";
+  public String Wait(Model model, Principal prin) {
+    int cardId = 0;
+    //ユーザ名を取得
+    String userName = prin.getName();
+    //手札を取得
+    ArrayList<Card> hands = sort(playerHandMapper.selectCardByUserName(userName));
+
+    //防御札以外を見つけて一覧から削除
+    for (int i = 0; i < hands.size(); i++) {
+      cardId = hands.get(i).getId();
+      if (!(cardId >= 11 && cardId <= 20)) {
+        hands.remove(i);
+      }
+    }
+    model.addAttribute("playerhand", hands);
+
+    return "blockConfirmation.html";
   }
 
 }
