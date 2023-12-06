@@ -27,7 +27,7 @@
 
   <h2>攻撃がきました!！防御しますか？</h2>
 
-  <button onclick="/noBlock">防御しない</button>
+  <button onclick="noBlockFunk()">防御しない</button>
 
   <h3>防御札一覧</h3>
   <div>
@@ -52,6 +52,19 @@
   </div>
 
   <button onclick="location.href='/logout'">ログアウト</button>
+
+  <!--防御しないボタンを押した際にroomidをパラメータとして渡すためのjavascript-->
+  <script>
+    function noBlockFunk(){
+      //現在のパラメータを取得
+      const params = new URLSearchParams(window.location.search);
+      const paramName = 'roomid';
+      const paramValue = params.get(paramName);
+      //パラメータを含めたUrlを生成
+      var href = "/noBlock?roomid=";
+      window.location.href = href + paramValue;
+    }
+  </script>
 </body>
 
 </html>

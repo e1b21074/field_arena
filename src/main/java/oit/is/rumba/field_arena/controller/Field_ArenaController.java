@@ -165,7 +165,6 @@ public class Field_ArenaController {
       attack(card, roomid, model, prin);
       roomMapper.changeTurns(roomid, Hps.getUserName());
       return "attackWait.html";
-    } else if (card.getCardAttribute().equals("防具") && !prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
     } else if (card.getCardAttribute().equals("回復") && prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
       heal(card, roomid, model, prin);
       roomMapper.changeTurns(roomid, Hps.getUserName());
@@ -323,7 +322,6 @@ public class Field_ArenaController {
 
   @GetMapping("/Wait")
   public String Wait(@RequestParam Integer roomid, Model model, Principal prin) {
-    int cardId = 0;
     //ユーザ名を取得
     String userName = prin.getName();
     //手札を取得
@@ -335,4 +333,26 @@ public class Field_ArenaController {
     return "blockConfirmation.html";
   }
 
+  //防御しない時のメソッド
+  @GetMapping("/noBlock")
+  public String noBlock(@RequestParam Integer roomid,Model model, Principal prin) {
+
+    String userName=prin.getName();
+
+    int roomsId=roomid;
+    Hp myHp = hpMapper.selectMyHp(roomsId, userName);
+
+    //相手の攻撃の強さを取得
+    int attackPoint = myHp.getAttackPoint();
+
+    hpMapper.updateAttackFalse(roomsId, userName, attackPoint);
+
+    model.addAttribute("hp", myHp.getHp());
+    model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
+    Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
+    model.addAttribute("enemy", enemyHp);
+    model.addAttribute("roomsId", roomsId);
+
+    return "game.html";
+  }
 }

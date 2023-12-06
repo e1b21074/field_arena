@@ -7,7 +7,7 @@
   <title>カードゲーム</title>
   <script>
     window.onload = function () {
-      var sse = new EventSource('/active');
+      var sse = new EventSource('/blockWait');
       sse.onmessage = function (event) {
         var active_list = JSON.parse(event.data);
         var active_div = "<h2>部屋一覧</h2>";
