@@ -46,21 +46,12 @@
     <h2><span sec:authentication="name"></span> のHP : <span th:if="${hp}" th:text="${hp}"></span></h2>
   </div>
   <div id="enemyHp">
-    <h2>
-      <span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}" th:text="${enemy.hp}"></span>
-    </h2>
+    <h2><span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}"
+        th:text="${enemy.hp}"></span></h2>
   </div>
-
-  <h2 id="turn">
-    <nobr th:if="${turns}">[[${turns}]]のターン
-      <nobr th:if="${turns==enemy.userName}">
-        <nobr class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </nobr>
-      </nobr>
-    </nobr>
-  </h2>
-
+  <div id="turn">
+    <h2 th:if="${turns}">[[${turns}]]のターン</div>
+  </div>
   <div>
     <center>
       <div class="btn-group" role="group" aria-label="Basic mixed styles example">

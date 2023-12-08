@@ -51,15 +51,18 @@
     </h2>
   </div>
 
-  <h2 id="turn">
-    <nobr th:if="${turns}">[[${turns}]]のターン
-      <nobr th:if="${turns==enemy.userName}">
-        <nobr class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </nobr>
-      </nobr>
-    </nobr>
-  </h2>
+  <center>
+    <h2 id="turn">
+      <div id="enemyHp">
+        <nobr th:if="${turns}">[[${turns}]]のターン</nobr>
+        <div th:if="${enemy.userName}">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </h2>
+  </center>
 
   <div>
     <center>
