@@ -63,6 +63,11 @@
     [[${blockPoint}]]防御しました!!
   </div>
 
+  <!--あたえたダメージを表示-->
+  <div th:if="${attackPoint}">
+    [[${attackPoint}]]のダメージをあたえました
+  </div>
+
   <center>
     <div th:if="${result}">
       [[${result}]]

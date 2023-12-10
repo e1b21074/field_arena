@@ -38,6 +38,9 @@ public interface HpMapper {
   void updateAttackFalse(int roomsId, String userName,int attackPoint);
 
   @Select("select attackFlag from userHp where roomsId = #{roomsId} AND userName = #{userName}")
-  int selectFlag(int roomsId, String userName);
+  boolean selectFlag(int roomsId, String userName);
+
+  @Select("select attackFlag from userHp where roomsId = #{roomsId} AND userName <> #{userName}")
+  boolean selectAttackFlag(int roomsId, String userName);
 
 }

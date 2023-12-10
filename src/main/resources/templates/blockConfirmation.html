@@ -5,28 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>カードゲーム</title>
-  <script>
-    window.onload = function () {
-      var sse = new EventSource('/active');
-      sse.onmessage = function (event) {
-        var active_list = JSON.parse(event.data);
-        var active_div = "<h2>部屋一覧</h2>";
-        for (var i = 0; i < active_list.length; i++) {
-          active_div = active_div + "<p><a href=" + "/inroom?id=" + active_list[i].id + ">" + active_list[i].roomName + "</a></p>";
-        }
-        var div = document.getElementById("active_room");
-        div.innerHTML = active_div;
-      }
-    }
-  </script>
-
 </head>
 
 <body>
   <h2>ユーザー名：<a sec:authentication="name"></a></h2>
+  <h2>あなたのHP : <span th:if="${Hp}">[[${Hp}]]</span></h2>
 
   <h2>攻撃がきました!！防御しますか？</h2>
 
+  <div>[[${attackPoint}]]の強さの攻撃</div>
   <button onclick="noBlockFunk()">防御しない</button>
 
   <h3>防御札一覧</h3>

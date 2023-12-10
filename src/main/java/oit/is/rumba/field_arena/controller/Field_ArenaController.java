@@ -2,6 +2,7 @@ package oit.is.rumba.field_arena.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -132,12 +133,20 @@ public class Field_ArenaController {
 
   @GetMapping("/inroom")
   public String entrRoom(@RequestParam Integer id, Principal prin, ModelMap model) {
-    String roomName = roomMapper.selectById(id);
+    Room room = roomMapper.selectById(id);
     asyncFiled_Area.enterRoom(id, prin.getName());
-    model.addAttribute("room", roomName);
+    model.addAttribute("room", room.getRoomName());
     String userName = prin.getName();
-    int roomId = id;
+    int roomId = room.getId();
     hpMapper.createHp(roomId, userName);
+    Random rnd=new Random();
+    switch (rnd.nextInt(2)) {
+      case 0:
+        roomMapper.updateTurnById(room.getId(), room.getUser1());
+        break;
+      case 1:
+        roomMapper.updateTurnById(room.getId(), room.getUser2());
+    }
     return "room.html";
   }
 
@@ -186,7 +195,9 @@ public class Field_ArenaController {
   public String attack(Card card, int roomid, Model model, Principal prin) {
     int roomsId = roomid;
     String userName = prin.getName();
-    hpMapper.updateAttackTrue(roomsId, userName,card.getCardStrong());
+    hpMapper.updateAttackTrue(roomsId, userName, card.getCardStrong());
+    playerHandMapper.deletePlayerHand(playerHandMapper.selecthandnum(userName, card.getId()).get(0).getId());
+
 
     return "attackWait.html";
   }
@@ -242,6 +253,7 @@ public class Field_ArenaController {
     hpMapper.updateAttackFalse(roomsId, userName, attackPoint);
 
     model.addAttribute("blockPoint", blockPoint);
+    model.addAttribute("turns", roomMapper.selectTurnsById(roomid));
     return "game.html";
   }
 
@@ -326,20 +338,23 @@ public class Field_ArenaController {
     String userName = prin.getName();
     //手札を取得
     ArrayList<Card> hands = sort(playerHandMapper.selectBlockCardByUserName(userName));
-
+    Hp myHp = hpMapper.selectMyHp(roomid, userName);
+    int attackPoint = myHp.getAttackPoint();
     model.addAttribute("playerhand", hands);
     model.addAttribute("roomsId", roomid);
+    model.addAttribute("attackPoint", attackPoint);
+    model.addAttribute("Hp", myHp.getHp());
 
     return "blockConfirmation.html";
   }
 
   //防御しない時のメソッド
   @GetMapping("/noBlock")
-  public String noBlock(@RequestParam Integer roomid,Model model, Principal prin) {
+  public String noBlock(@RequestParam Integer roomid, Model model, Principal prin) {
 
-    String userName=prin.getName();
+    String userName = prin.getName();
 
-    int roomsId=roomid;
+    int roomsId = roomid;
     Hp myHp = hpMapper.selectMyHp(roomsId, userName);
 
     //相手の攻撃の強さを取得
@@ -347,12 +362,33 @@ public class Field_ArenaController {
 
     hpMapper.updateAttackFalse(roomsId, userName, attackPoint);
 
-    model.addAttribute("hp", myHp.getHp());
-    model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
-    Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
-    model.addAttribute("enemy", enemyHp);
-    model.addAttribute("roomsId", roomsId);
+    reRoad(roomid, model, prin);
 
+    return "game.html";
+  }
+
+  //相手の防御を非同期で待つメソッド
+  @GetMapping("blockWait")
+  public SseEmitter blockWait(@RequestParam Integer roomid, Principal prin) {
+    final SseEmitter emitter = new SseEmitter();
+    this.asyncFiled_Area.blockWaitAsync(emitter, roomid, prin);
+    return emitter;
+  }
+
+  //攻撃終了する際の処理
+  @GetMapping("/attackFin")
+  public String attackFin(@RequestParam Integer roomid, Model model,Principal prin) {
+    String userName = prin.getName();
+
+    //相手のHpを取得
+    Hp enemyHp = hpMapper.selectEnemyHp(roomid, userName);
+    int hp = enemyHp.getHp();
+    int attackPoint=enemyHp.getAttackPoint();
+    //相手のHpを減らす
+    hp -= attackPoint;
+    hpMapper.updateEnemyHp(roomid, userName, hp);
+    model.addAttribute("attackPoint", attackPoint);
+    reRoad(roomid, model, prin);
     return "game.html";
   }
 }
