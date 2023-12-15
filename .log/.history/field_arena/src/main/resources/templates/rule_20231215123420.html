@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カードゲーム</title>
+</head>
+
+<body>
+  <h1>ルール説明</h1>
+
+  <h3>勝利条件</h3>
+  <p>相手のHPを0にすれば勝ちとなる</p>
+
+  <h3>敗北条件</h3>
+  <p>自分のHPが0になると負けとなる</p>
+
+  <h3>カードの種類</h3>
+  <p>カードは武器・防具・回復の3種類がある</p>
+  <p>武器で攻撃を行い、防具で防御する</p>
+  <p>回復でHPを回復する</p>
+
+  <h3>ターン</h3>
+  <p>自分のターンでは、手札から武器または回復からカードを1枚選んで使用する</p>
+  <p>相手のターンでは、相手が使用した武器カードに対して防具カードを1枚選んで使用できる</p>
+  <p>カードドローは、自分のターンのときに1枚ドローすることができるが、ドローすると相手のターンとなる</p>
+
+  <br>
+
+  <div>
+    <button onclick="location.href='/Card'">カードの表示</button>
+    <ul>
+      <li th:each="card : ${cards}">
+        カード属性:[[${card.cardAttribute}]] 強さ:[[${card.cardStrong}]]
+      </li>
+    </ul>
+  </div>
+
+  <button onclick="location.href='/'">メインメニューへ</button>
+</body>
+
+</html>
