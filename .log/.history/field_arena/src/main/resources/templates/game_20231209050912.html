@@ -41,7 +41,7 @@
   </script>
 </head>
 
-<body background="img/背景.jpg">
+<body>
   <div id="myHp">
     <h2><span sec:authentication="name"></span> のHP : <span th:if="${hp}" th:text="${hp}"></span></h2>
   </div>
@@ -53,11 +53,11 @@
 
   <h2 id="turn">
     <nobr th:if="${turns}">[[${turns}]]のターン
-      <nobr th:if="${turns==enemy.userName}">
-        <nobr class="spinner-border" role="status">
+      <div th:if="${turns==enemy.userName}">
+        <div class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>
-        </nobr>
-      </nobr>
+        </div>
+      </div>
     </nobr>
   </h2>
 
