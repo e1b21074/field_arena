@@ -4,10 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
   <style>
     h2 {
       text-align: center;
@@ -39,36 +35,27 @@
     }
 
   </script>
+
+  <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body background="img/背景.jpg">
+<body>
   <div id="myHp">
     <h2><span sec:authentication="name"></span> のHP : <span th:if="${hp}" th:text="${hp}"></span></h2>
   </div>
   <div id="enemyHp">
-    <h2>
-      <span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}" th:text="${enemy.hp}"></span>
-    </h2>
+    <h2><span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}"
+        th:text="${enemy.hp}"></span></h2>
   </div>
-
-  <h2 id="turn">
-    <nobr th:if="${turns}">[[${turns}]]のターン
-      <nobr th:if="${turns==enemy.userName}">
-        <nobr class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </nobr>
-      </nobr>
-    </nobr>
-  </h2>
-
+  <div id="turn">
+    <h2 th:if="${turns}">[[${turns}]]のターン</div>
+  </div>
   <div>
-    <center>
-      <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-        <button type="button" class="btn btn-outline-primary btn-lg" onclick="drawfunk()">ドロー</button>
-        <button type="button" class="btn btn-outline-danger btn-lg" onclick="location.href='/gamearea'">戻る</button>
-        <button type="button" class="btn btn-outline-warning btn-lg" onclick="location.href='/logout'">ログアウト</button>
-      </div>
-    </center>
+    <h2>
+      <button onclick="drawfunk()">ドロー</button>
+      <button onclick="location.href='/gamearea'">戻る</button>
+      <button onclick="location.href='/logout'">ログアウト</button>
+    </h2>
 
   </div>
 
@@ -82,7 +69,7 @@
   <div id="HP"></div>
 
   <div>
-      <h2>
+    <ul>
         <nobr th:each="playerhand : ${playerhand}">
           <a th:href="@{/cardUse(id=${playerhand.id},roomid=${roomsId})}">
             <nobr style="text-align: center">
@@ -119,7 +106,7 @@
             </nobr>
           </a>
         </nobr>
-      </h2>
+    </ul>
   </div>
 
   <!--以下はjavascriptで各操作時に部屋のidをパラメータとして渡す-->
@@ -150,8 +137,6 @@
     }
 
   </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 
 </html>
