@@ -33,8 +33,7 @@
           //ページの再読み込み
           window.location.href = "/reRoad?roomid=" + paramValue
         }else{
-          //攻撃が来たということなので防御用のページに遷移
-          location.href ="/Wait?roomid="+paramValue;
+          location.href ="/Wait";
         }
       }
     }
@@ -42,7 +41,7 @@
   </script>
 </head>
 
-<body background="img/背景.jpg">
+<body>
   <div id="myHp">
     <h2><span sec:authentication="name"></span> のHP : <span th:if="${hp}" th:text="${hp}"></span></h2>
   </div>
@@ -52,15 +51,17 @@
     </h2>
   </div>
 
-  <h2 id="turn">
-    <nobr th:if="${turns}">[[${turns}]]のターン
-      <nobr th:if="${turns==enemy.userName}">
-        <nobr class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </nobr>
+  <center>
+    <h2 id="turn">
+      <nobr th:if="${turns}">[[${turns}]]のターン
+        <div th:if="${enemy.userName}">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
       </nobr>
-    </nobr>
-  </h2>
+    </h2>
+  </center>
 
   <div>
     <center>
@@ -71,16 +72,6 @@
       </div>
     </center>
 
-  </div>
-
-  <!--防御した時に表示されるタブ-->
-  <div th:if="${blockPoint}">
-    [[${blockPoint}]]防御しました!!
-  </div>
-
-  <!--あたえたダメージを表示-->
-  <div th:if="${attackPoint}">
-    [[${attackPoint}]]のダメージをあたえました
   </div>
 
   <center>
