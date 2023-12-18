@@ -139,13 +139,19 @@ public class Field_ArenaController {
     String userName = prin.getName();
     int roomId = room.getId();
     hpMapper.createHp(roomId, userName);
-    Random rnd=new Random();
+    Random rnd = new Random();
+    room = roomMapper.selectById(roomId);
     switch (rnd.nextInt(2)) {
       case 0:
         roomMapper.updateTurnById(room.getId(), room.getUser1());
         break;
+
       case 1:
+      System.out.println(room.getUser2());
         roomMapper.updateTurnById(room.getId(), room.getUser2());
+        break;
+      default:
+        System.out.println("error");
     }
     return "room.html";
   }

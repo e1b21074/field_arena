@@ -15,8 +15,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import oit.is.rumba.field_arena.model.*;
 
-import java.util.Random;
-
 @Service
 public class AsyncFiled_Area {
   boolean Room_falg = false;
@@ -73,7 +71,6 @@ public class AsyncFiled_Area {
   @Async
   public void asyncEnter(SseEmitter emitter) {
     try {
-      Random rnd = new Random();
       while (true) {
         System.out.println("enter ok!");
         if (Room_enter == false) {
@@ -83,12 +80,14 @@ public class AsyncFiled_Area {
         Room room = roomMapper.selectAllByAtiveandNum();
         emitter.send(room);
         ent_cnt++;
-        if (ent_cnt == 2) {
-          roomMapper.updateActiveById(room.getId());
-          Room_enter = false;
-          ent_cnt = 0;
+        if (ent_cnt != 2) {
+          TimeUnit.MILLISECONDS.sleep(1000);
+
         }
-        TimeUnit.MILLISECONDS.sleep(1000);
+        roomMapper.updateActiveById(room.getId());
+        Room_enter = false;
+        ent_cnt = 0;
+        break;
       }
     } catch (Exception e) {
       logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());
