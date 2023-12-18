@@ -31,13 +31,16 @@ public interface HpMapper {
   @Select("select * from userHp where roomsid=#{roomid} and userName <> #{userName}")
   Hp selectByroomIdAndUsername(int roomid, String userName);
 
-  @Update("UPDATE userHp SET attackFlag=true WHERE roomsId = #{roomsId} AND userName <> #{userName}")
-  void updateAttackTrue(int roomsId, String userName);
+  @Update("UPDATE userHp SET attackFlag=true,attackPoint=#{attackPoint} WHERE roomsId = #{roomsId} AND userName <> #{userName}")
+  void updateAttackTrue(int roomsId, String userName,int attackPoint);
 
-  @Update("UPDATE userHp SET attackFlag=false WHERE roomsId = #{roomsId} AND userName = #{userName}")
-  void updateAttackFalse(int roomsId, String userName);
+  @Update("UPDATE userHp SET attackFlag=false,attackPoint=#{attackPoint} WHERE roomsId = #{roomsId} AND userName = #{userName}")
+  void updateAttackFalse(int roomsId, String userName,int attackPoint);
 
   @Select("select attackFlag from userHp where roomsId = #{roomsId} AND userName = #{userName}")
-  int selectFlag(int roomsId, String userName);
+  boolean selectFlag(int roomsId, String userName);
+
+  @Select("select attackFlag from userHp where roomsId = #{roomsId} AND userName <> #{userName}")
+  boolean selectAttackFlag(int roomsId, String userName);
 
 }

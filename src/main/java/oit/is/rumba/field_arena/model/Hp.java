@@ -5,8 +5,28 @@ public class Hp {
   int roomId;
   String userName;
   int hp;
+  boolean attackFlag;
+  int attackPoint;
 
   final int defaultHp = 10;
+
+
+
+  public Hp(boolean attackFlag) {
+    this.attackFlag = attackFlag;
+  }
+
+  public int getAttackPoint() {
+    return attackPoint;
+  }
+
+  public void setAttackPoint(int attackPoint) {
+    this.attackPoint = attackPoint;
+  }
+
+  public int getDefaultHp() {
+    return defaultHp;
+  }
 
   public int getId() {
     return id;
@@ -50,5 +70,13 @@ public class Hp {
 
   public void initHp() {
     this.hp = defaultHp;
+  }
+
+  public boolean isAttackFlag() {
+    return attackFlag;
+  }
+
+  public void setAttackFlag(boolean attackFlag) {
+    this.attackFlag = attackFlag;
   }
 }

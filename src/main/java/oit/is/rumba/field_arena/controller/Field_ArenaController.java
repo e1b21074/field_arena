@@ -2,6 +2,7 @@ package oit.is.rumba.field_arena.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -132,12 +133,26 @@ public class Field_ArenaController {
 
   @GetMapping("/inroom")
   public String entrRoom(@RequestParam Integer id, Principal prin, ModelMap model) {
-    String roomName = roomMapper.selectById(id);
+    Room room = roomMapper.selectById(id);
     asyncFiled_Area.enterRoom(id, prin.getName());
-    model.addAttribute("room", roomName);
+    model.addAttribute("room", room.getRoomName());
     String userName = prin.getName();
-    int roomId = id;
+    int roomId = room.getId();
     hpMapper.createHp(roomId, userName);
+    Random rnd = new Random();
+    room = roomMapper.selectById(roomId);
+    switch (rnd.nextInt(2)) {
+      case 0:
+        roomMapper.updateTurnById(room.getId(), room.getUser1());
+        break;
+
+      case 1:
+      System.out.println(room.getUser2());
+        roomMapper.updateTurnById(room.getId(), room.getUser2());
+        break;
+      default:
+        System.out.println("error");
+    }
     return "room.html";
   }
 
@@ -165,8 +180,6 @@ public class Field_ArenaController {
       attack(card, roomid, model, prin);
       roomMapper.changeTurns(roomid, Hps.getUserName());
       return "attackWait.html";
-    } else if (card.getCardAttribute().equals("防具") && !prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
-      block(card, roomid, model, prin);
     } else if (card.getCardAttribute().equals("回復") && prin.getName().equals(roomMapper.selectTurnsById(roomid))) {
       heal(card, roomid, model, prin);
       roomMapper.changeTurns(roomid, Hps.getUserName());
@@ -188,7 +201,9 @@ public class Field_ArenaController {
   public String attack(Card card, int roomid, Model model, Principal prin) {
     int roomsId = roomid;
     String userName = prin.getName();
-    hpMapper.updateAttackTrue(roomsId, userName);
+    hpMapper.updateAttackTrue(roomsId, userName, card.getCardStrong());
+    playerHandMapper.deletePlayerHand(playerHandMapper.selecthandnum(userName, card.getId()).get(0).getId());
+
 
     return "attackWait.html";
   }
@@ -211,9 +226,10 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/block")
-  public String block(Card card, int roomid, Model model, Principal prin) {
+  public String block(@RequestParam Integer id, @RequestParam Integer roomid, Model model, Principal prin) {
     int roomsId = roomid;
     String userName = prin.getName();
+    Card card = cardMapper.selectCardById(id);
     Hp myHp = hpMapper.selectMyHp(roomsId, userName);
     model.addAttribute("hp", myHp.getHp());
     // 選択されたカードを削除する
@@ -223,6 +239,27 @@ public class Field_ArenaController {
     model.addAttribute("enemy", enemyHp);
     model.addAttribute("roomsId", roomsId);
 
+    //相手の攻撃の強さを取得
+    int attackPoint = myHp.getAttackPoint();
+
+    //防御札の強さを取得
+    int blockPoint = card.getCardStrong();
+
+    //防御札の強さ分攻撃の強さを減らす
+    if (attackPoint < blockPoint) {
+      attackPoint = 0;
+    } else {
+      attackPoint -= blockPoint;
+    }
+
+    myHp.setAttackFlag(false);
+    myHp.setAttackPoint(attackPoint);
+
+    //防御したことをDBに反映
+    hpMapper.updateAttackFalse(roomsId, userName, attackPoint);
+
+    model.addAttribute("blockPoint", blockPoint);
+    model.addAttribute("turns", roomMapper.selectTurnsById(roomid));
     return "game.html";
   }
 
@@ -302,8 +339,62 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/Wait")
-  public String Wait() {
-    return "attackWait.html";
+  public String Wait(@RequestParam Integer roomid, Model model, Principal prin) {
+    //ユーザ名を取得
+    String userName = prin.getName();
+    //手札を取得
+    ArrayList<Card> hands = sort(playerHandMapper.selectBlockCardByUserName(userName));
+    Hp myHp = hpMapper.selectMyHp(roomid, userName);
+    int attackPoint = myHp.getAttackPoint();
+    model.addAttribute("playerhand", hands);
+    model.addAttribute("roomsId", roomid);
+    model.addAttribute("attackPoint", attackPoint);
+    model.addAttribute("Hp", myHp.getHp());
+
+    return "blockConfirmation.html";
   }
 
+  //防御しない時のメソッド
+  @GetMapping("/noBlock")
+  public String noBlock(@RequestParam Integer roomid, Model model, Principal prin) {
+
+    String userName = prin.getName();
+
+    int roomsId = roomid;
+    Hp myHp = hpMapper.selectMyHp(roomsId, userName);
+
+    //相手の攻撃の強さを取得
+    int attackPoint = myHp.getAttackPoint();
+
+    hpMapper.updateAttackFalse(roomsId, userName, attackPoint);
+
+    reRoad(roomid, model, prin);
+
+    return "game.html";
+  }
+
+  //相手の防御を非同期で待つメソッド
+  @GetMapping("blockWait")
+  public SseEmitter blockWait(@RequestParam Integer roomid, Principal prin) {
+    final SseEmitter emitter = new SseEmitter();
+    this.asyncFiled_Area.blockWaitAsync(emitter, roomid, prin);
+    return emitter;
+  }
+
+  //攻撃終了する際の処理
+  @GetMapping("/attackFin")
+  public String attackFin(@RequestParam Integer roomid, Model model,Principal prin) {
+    String userName = prin.getName();
+
+    //相手のHpを取得
+    Hp enemyHp = hpMapper.selectEnemyHp(roomid, userName);
+    int hp = enemyHp.getHp();
+    int attackPoint=enemyHp.getAttackPoint();
+    //相手のHpを減らす
+    hp -= attackPoint;
+    hpMapper.updateEnemyHp(roomid, userName, hp);
+    model.addAttribute("attackPoint", attackPoint);
+    reRoad(roomid, model, prin);
+    return "game.html";
+  }
 }

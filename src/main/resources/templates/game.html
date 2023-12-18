@@ -33,7 +33,8 @@
           //ページの再読み込み
           window.location.href = "/reRoad?roomid=" + paramValue
         }else{
-          location.href ="/Wait";
+          //攻撃が来たということなので防御用のページに遷移
+          location.href ="/Wait?roomid="+paramValue;
         }
       }
     }
@@ -70,6 +71,16 @@
       </div>
     </center>
 
+  </div>
+
+  <!--防御した時に表示されるタブ-->
+  <div th:if="${blockPoint}">
+    [[${blockPoint}]]防御しました!!
+  </div>
+
+  <!--あたえたダメージを表示-->
+  <div th:if="${attackPoint}">
+    [[${attackPoint}]]のダメージをあたえました
   </div>
 
   <center>

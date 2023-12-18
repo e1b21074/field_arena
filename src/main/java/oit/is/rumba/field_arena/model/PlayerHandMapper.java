@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface PlayerHandMapper {
-    
+
     @Select("SELECT * FROM player_hand;")
     ArrayList<PlayerHand> selectAllPlayerHand();
 
@@ -27,4 +27,7 @@ public interface PlayerHandMapper {
 
     @Select("select * from playerhand where userName = #{userName};")
     ArrayList<PlayerHand> selecthandByUserName(String userName);
+
+    @Select("SELECT cards.id, cardAttribute, cardStrong FROM  playerhand join cards on (card_id = cards.id) WHERE userName = #{userName} and  (cards.id >= 11 and cards.id<=20);")
+    ArrayList<Card> selectBlockCardByUserName(String userName);
 }

@@ -1,5 +1,6 @@
 package oit.is.rumba.field_arena.service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -13,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import oit.is.rumba.field_arena.model.*;
-
-import java.util.Random;
 
 @Service
 public class AsyncFiled_Area {
@@ -42,6 +41,7 @@ public class AsyncFiled_Area {
   public void asyncRoom(SseEmitter emitter) {
     try {
       while (true) {
+        System.out.println("ok");
         if (Room_falg == false) {
           TimeUnit.MILLISECONDS.sleep(500);
           continue;
@@ -71,8 +71,8 @@ public class AsyncFiled_Area {
   @Async
   public void asyncEnter(SseEmitter emitter) {
     try {
-      Random rnd = new Random();
       while (true) {
+        System.out.println("enter ok!");
         if (Room_enter == false) {
           TimeUnit.MILLISECONDS.sleep(500);
           continue;
@@ -80,19 +80,14 @@ public class AsyncFiled_Area {
         Room room = roomMapper.selectAllByAtiveandNum();
         emitter.send(room);
         ent_cnt++;
-        if (ent_cnt == 2) {
-          Room_enter = false;
-          ent_cnt = 0;
-          switch(rnd.nextInt(2)){
-            case 0:
-              roomMapper.updateActiveById(room.getId(), room.getUser1());
-              break;
-            case 1:
-              roomMapper.updateActiveById(room.getId(), room.getUser2());
-              break;
-          }
+        if (ent_cnt != 2) {
+          TimeUnit.MILLISECONDS.sleep(1000);
+
         }
-        TimeUnit.MILLISECONDS.sleep(1000);
+        roomMapper.updateActiveById(room.getId());
+        Room_enter = false;
+        ent_cnt = 0;
+        break;
       }
     } catch (Exception e) {
       logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());
@@ -108,7 +103,7 @@ public class AsyncFiled_Area {
     int user2Hp;
     ArrayList<Hp> st_hps = hpMapper.selectByRoomId(roomid);
     String turn = "";
-    int attackFlag = 0;
+    boolean attackFlag = false;
 
     // それぞれのユーザのHpの初期値を保存
     // DBの上の方のユーザがuser1と仮定
@@ -118,12 +113,12 @@ public class AsyncFiled_Area {
 
     try {
       while (true) {
+        System.out.println( userName+" HpAsync OK!");
         ArrayList<Hp> hps = hpMapper.selectByRoomId(roomid);
         String tmp_turn = roomMapper.selectTurnsById(roomid);
         attackFlag = hpMapper.selectFlag(roomid, userName);
-        System.out.println("ok");
         // HPの変動が無ければ少し待ってcontinuで次の繰り返しへ
-        if ((user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) && tmp_turn.equals(turn) && attackFlag==0) {
+        if ((user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) && tmp_turn.equals(turn) && attackFlag==false) {
           TimeUnit.MILLISECONDS.sleep(500);
           continue;
         }
@@ -131,9 +126,8 @@ public class AsyncFiled_Area {
         // 変更があったということなので更新
         user1Hp = hps.get(0).getHp();
         user2Hp = hps.get(1).getHp();
-        turn=tmp_turn;
+        turn = tmp_turn;
 
-        System.out.println(userName+"ok");
         // データを送信
         emitter.send(attackFlag);
 
@@ -147,21 +141,29 @@ public class AsyncFiled_Area {
     System.out.println("HPAsyncEmitter complete");
   }
 
-  /*
+
+  //相手の防御を非同期でまつ用のメソッド
   @Async
-  public void TurnsAsyncEmitter(SseEmitter emitter, int roomid) {
-    String turn;
-    try{
+  public void blockWaitAsync(SseEmitter emitter,int roomid,Principal prin) {
+    boolean flag;
+    String userName = prin.getName();
+    try {
       while (true) {
-        turn = roomMapper.selectTurnsById(roomid);
-        emitter.send(turn);
-        TimeUnit.MILLISECONDS.sleep(1000);
+        System.out.println("Attack Ok!");
+        flag = hpMapper.selectAttackFlag(roomid, userName);
+        if (flag == true) {
+          TimeUnit.MILLISECONDS.sleep(500);
+          continue;
+        }
+        emitter.send(flag);
+        break;
       }
-    }catch (Exception e) {
+    } catch (Exception e) {
       logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());
     } finally {
       emitter.complete();
     }
-    System.out.println("asynTurn complete");
-  }*/
+    System.out.println("blockWaitAsync complete");
+  }
+
 }
