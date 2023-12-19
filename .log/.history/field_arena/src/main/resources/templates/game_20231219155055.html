@@ -70,9 +70,9 @@
 
   <div>
     <center>
-      <a onclick="drawfunc()">
-        <img src="img/山札.png" width="200" height="200">
-      </a>
+      <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+        <button type="button" class="btn btn-outline-warning btn-lg" onclick="drawfunk()">ドロー</button>
+      </div>
     </center>
 
   </div>
@@ -138,8 +138,22 @@
 
   <!--以下はjavascriptで各操作時に部屋のidをパラメータとして渡す-->
   <script>
+    //ダメージのボタンが押された際の処理
+    function attackfunk() {
+      console.log("攻撃しました")
+    }
+
+    //回復のボタンが押された際の処理
+    function healfunk() {
+      console.log("回復されました")
+    }
+
+    function guardfunk() {
+      console.log("防御しました")
+    }
+
     //ドローのボタンが押された際の処理
-    function drawfunc() {
+    function drawfunk() {
       //現在のパラメータを取得
       const params = new URLSearchParams(window.location.search);
       const paramName = 'roomid';
