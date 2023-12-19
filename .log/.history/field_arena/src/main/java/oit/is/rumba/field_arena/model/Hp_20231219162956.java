@@ -8,6 +8,8 @@ public class Hp {
   boolean attackFlag;
   int attackPoint;
 
+  //final int defaultHp = 30;
+
 
 
   public Hp(boolean attackFlag) {
@@ -21,6 +23,10 @@ public class Hp {
   public void setAttackPoint(int attackPoint) {
     this.attackPoint = attackPoint;
   }
+
+  /*public int getDefaultHp() {
+    return defaultHp;
+  }*/
 
   public int getId() {
     return id;
@@ -61,6 +67,10 @@ public class Hp {
   public void plusHp(int healPoint) {
     this.hp+=healPoint;
   }
+
+  /*public void initHp() {
+    this.hp = defaultHp;
+  }*/
 
   public boolean isAttackFlag() {
     return attackFlag;
