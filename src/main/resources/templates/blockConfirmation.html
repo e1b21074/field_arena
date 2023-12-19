@@ -38,11 +38,10 @@
     </ul>
   </div>
 
-  <button onclick="location.href='/logout'">ログアウト</button>
 
   <!--防御しないボタンを押した際にroomidをパラメータとして渡すためのjavascript-->
   <script>
-    function noBlockFunk(){
+    function noBlockFunk() {
       //現在のパラメータを取得
       const params = new URLSearchParams(window.location.search);
       const paramName = 'roomid';

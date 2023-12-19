@@ -163,14 +163,6 @@ public class Field_ArenaController {
     return emitter;
   }
 
-  // @GetMapping("/hpTest")
-  // public String hp(Model model) {
-  // myHp.initHp();
-  // int hp = myHp.getHp();
-  // model.addAttribute("hp", hp);
-  // return "hpTest.html";
-  // }
-
   @GetMapping("/cardUse")
   public String cardUse(@RequestParam String id, @RequestParam Integer roomid, Model model, Principal prin) {
     Card card = cardMapper.selectCardById(Integer.parseInt(id));
