@@ -49,11 +49,14 @@ public class AsyncFiled_Area {
         ArrayList<Room> rooms = roomMapper.selectByActive();
         emitter.send(rooms);
         cnt++;
-        if (cnt == 2) {
-          Room_falg = false;
-          cnt = 0;
+        if (cnt != 2) {
+          TimeUnit.MILLISECONDS.sleep(1000);
+          continue;
         }
-        TimeUnit.MILLISECONDS.sleep(10000);
+
+        Room_falg = false;
+        cnt = 0;
+        break;
       }
     } catch (Exception e) {
       logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());
@@ -79,14 +82,9 @@ public class AsyncFiled_Area {
         }
         Room room = roomMapper.selectAllByAtiveandNum();
         emitter.send(room);
-        ent_cnt++;
-        if (ent_cnt != 2) {
-          TimeUnit.MILLISECONDS.sleep(1000);
-
-        }
         roomMapper.updateActiveById(room.getId());
         Room_enter = false;
-        ent_cnt = 0;
+        System.out.println("break");
         break;
       }
     } catch (Exception e) {
@@ -94,7 +92,7 @@ public class AsyncFiled_Area {
     } finally {
       emitter.complete();
     }
-    System.out.println("asyncRoom complete");
+    System.out.println("asyncEnter complete");
   }
 
   @Async
