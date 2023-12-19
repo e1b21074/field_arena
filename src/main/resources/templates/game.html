@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
   <style>
     h2 {
@@ -28,13 +29,13 @@
       const paramValue = params.get(paramName);
       var sse = new EventSource('/HPasync?roomid=' + paramValue);
       sse.onmessage = function (event) {
-        var flag=JSON.parse(event.data);
-        if(flag==0){
+        var flag = JSON.parse(event.data);
+        if (flag == 0) {
           //ページの再読み込み
           window.location.href = "/reRoad?roomid=" + paramValue
-        }else{
+        } else {
           //攻撃が来たということなので防御用のページに遷移
-          location.href ="/Wait?roomid="+paramValue;
+          location.href = "/Wait?roomid=" + paramValue;
         }
       }
     }
@@ -48,7 +49,8 @@
   </div>
   <div id="enemyHp">
     <h2>
-      <span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}" th:text="${enemy.hp}"></span>
+      <span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}"
+        th:text="${enemy.hp}"></span>
     </h2>
   </div>
 
@@ -66,8 +68,6 @@
     <center>
       <div class="btn-group" role="group" aria-label="Basic mixed styles example">
         <button type="button" class="btn btn-outline-primary btn-lg" onclick="drawfunk()">ドロー</button>
-        <button type="button" class="btn btn-outline-danger btn-lg" onclick="location.href='/gamearea'">戻る</button>
-        <button type="button" class="btn btn-outline-warning btn-lg" onclick="location.href='/logout'">ログアウト</button>
       </div>
     </center>
 
@@ -93,44 +93,44 @@
   <div id="HP"></div>
 
   <div>
-      <h2>
-        <nobr th:each="playerhand : ${playerhand}">
-          <a th:href="@{/cardUse(id=${playerhand.id},roomid=${roomsId})}">
-            <nobr style="text-align: center">
-              <nobr th:if="${playerhand.id} == 1"><img src="img/武器1.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 2"><img src="img/武器2.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 3"><img src="img/武器3.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 4"><img src="img/武器4.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 5"><img src="img/武器5.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 6"><img src="img/武器6.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 7"><img src="img/武器7.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 8"><img src="img/武器8.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 9"><img src="img/武器9.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 10"><img src="img/武器10.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 11"><img src="img/防具1.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 12"><img src="img/防具2.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 13"><img src="img/防具3.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 14"><img src="img/防具4.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 15"><img src="img/防具5.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 16"><img src="img/防具6.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 17"><img src="img/防具7.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 18"><img src="img/防具8.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 19"><img src="img/防具9.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 20"><img src="img/防具10.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 21"><img src="img/回復1.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 22"><img src="img/回復2.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 23"><img src="img/回復3.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 24"><img src="img/回復4.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 25"><img src="img/回復5.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 26"><img src="img/回復6.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 27"><img src="img/回復7.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 28"><img src="img/回復8.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 29"><img src="img/回復9.png" width="200" height="200"></nobr>
-              <nobr th:if="${playerhand.id} == 30"><img src="img/回復10.png" width="200" height="200"></nobr>
-            </nobr>
-          </a>
-        </nobr>
-      </h2>
+    <h2>
+      <nobr th:each="playerhand : ${playerhand}">
+        <a th:href="@{/cardUse(id=${playerhand.id},roomid=${roomsId})}">
+          <nobr style="text-align: center">
+            <nobr th:if="${playerhand.id} == 1"><img src="img/武器1.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 2"><img src="img/武器2.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 3"><img src="img/武器3.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 4"><img src="img/武器4.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 5"><img src="img/武器5.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 6"><img src="img/武器6.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 7"><img src="img/武器7.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 8"><img src="img/武器8.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 9"><img src="img/武器9.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 10"><img src="img/武器10.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 11"><img src="img/防具1.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 12"><img src="img/防具2.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 13"><img src="img/防具3.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 14"><img src="img/防具4.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 15"><img src="img/防具5.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 16"><img src="img/防具6.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 17"><img src="img/防具7.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 18"><img src="img/防具8.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 19"><img src="img/防具9.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 20"><img src="img/防具10.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 21"><img src="img/回復1.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 22"><img src="img/回復2.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 23"><img src="img/回復3.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 24"><img src="img/回復4.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 25"><img src="img/回復5.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 26"><img src="img/回復6.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 27"><img src="img/回復7.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 28"><img src="img/回復8.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 29"><img src="img/回復9.png" width="200" height="200"></nobr>
+            <nobr th:if="${playerhand.id} == 30"><img src="img/回復10.png" width="200" height="200"></nobr>
+          </nobr>
+        </a>
+      </nobr>
+    </h2>
   </div>
 
   <!--以下はjavascriptで各操作時に部屋のidをパラメータとして渡す-->
@@ -162,7 +162,9 @@
 
   </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
