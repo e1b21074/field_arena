@@ -132,28 +132,47 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/inroom")
-  public String entrRoom(@RequestParam Integer id, Principal prin, ModelMap model) {
-    Room room = roomMapper.selectById(id);
-    asyncFiled_Area.enterRoom(id, prin.getName());
-    model.addAttribute("room", room.getRoomName());
+  public String entrRoom(@RequestParam Integer roomid, Principal prin, ModelMap model) {
+    Room room = roomMapper.selectById(roomid);
+    asyncFiled_Area.enterRoom(roomid, prin.getName());
     String userName = prin.getName();
-    int roomId = room.getId();
-    hpMapper.createHp(roomId, userName);
+    int roomsId = room.getId();
+    hpMapper.createHp(roomsId, userName);
     Random rnd = new Random();
-    room = roomMapper.selectById(roomId);
+    room = roomMapper.selectById(roomsId);
     switch (rnd.nextInt(2)) {
       case 0:
         roomMapper.updateTurnById(room.getId(), room.getUser1());
         break;
 
       case 1:
-      System.out.println(room.getUser2());
+        System.out.println(room.getUser2());
         roomMapper.updateTurnById(room.getId(), room.getUser2());
         break;
       default:
         System.out.println("error");
     }
-    return "room.html";
+
+    ArrayList<Card> cards = cardMapper.selectAllCards();
+    PlayerHand hand = new PlayerHand();
+    Draw player = new Draw();
+    for (int i = 0; i < 5; i++) {
+      hand.setUserName(prin.getName());
+      hand.setCard_id(player.getHand(cards).getId());
+      playerHandMapper.setPlayerHand(hand.getUserName(), hand.getCard_id());
+    }
+    model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
+
+    // hpMapper.createHp(roomsId, userName);
+    Hp hp = hpMapper.selectMyHp(roomsId, userName);
+    model.addAttribute("hp", hp.getHp());
+    model.addAttribute("roomsId", roomsId);
+    // 敵のHP
+    Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
+    model.addAttribute("enemy", enemyHp);
+    model.addAttribute("turns", roomMapper.selectTurnsById(roomid));
+
+    return "game.html";
   }
 
   @GetMapping("/active")
