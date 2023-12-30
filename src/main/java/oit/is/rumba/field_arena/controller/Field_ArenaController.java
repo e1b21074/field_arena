@@ -215,7 +215,6 @@ public class Field_ArenaController {
     hpMapper.updateAttackTrue(roomsId, userName, card.getCardStrong());
     playerHandMapper.deletePlayerHand(playerHandMapper.selecthandnum(userName, card.getId()).get(0).getId());
 
-
     return "attackWait.html";
   }
 
@@ -250,13 +249,13 @@ public class Field_ArenaController {
     model.addAttribute("enemy", enemyHp);
     model.addAttribute("roomsId", roomsId);
 
-    //相手の攻撃の強さを取得
+    // 相手の攻撃の強さを取得
     int attackPoint = myHp.getAttackPoint();
 
-    //防御札の強さを取得
+    // 防御札の強さを取得
     int blockPoint = card.getCardStrong();
 
-    //防御札の強さ分攻撃の強さを減らす
+    // 防御札の強さ分攻撃の強さを減らす
     if (attackPoint < blockPoint) {
       attackPoint = 0;
     } else {
@@ -266,7 +265,7 @@ public class Field_ArenaController {
     myHp.setAttackFlag(false);
     myHp.setAttackPoint(attackPoint);
 
-    //防御したことをDBに反映
+    // 防御したことをDBに反映
     hpMapper.updateAttackFalse(roomsId, userName, attackPoint);
 
     model.addAttribute("blockPoint", blockPoint);
@@ -333,10 +332,10 @@ public class Field_ArenaController {
     // 勝敗
     if (enemyHp.getHp() <= 0) {
       HandReset(userName);
-      model.addAttribute("result", "あなたの勝ちです！");
+      model.addAttribute("result", "0");
     } else if (myHp.getHp() <= 0) {
       HandReset(userName);
-      model.addAttribute("result", "あなたの負けです！");
+      model.addAttribute("result", "1");
     }
 
     return "game.html";
@@ -351,9 +350,9 @@ public class Field_ArenaController {
 
   @GetMapping("/Wait")
   public String Wait(@RequestParam Integer roomid, Model model, Principal prin) {
-    //ユーザ名を取得
+    // ユーザ名を取得
     String userName = prin.getName();
-    //手札を取得
+    // 手札を取得
     ArrayList<Card> hands = sort(playerHandMapper.selectBlockCardByUserName(userName));
     Hp myHp = hpMapper.selectMyHp(roomid, userName);
     int attackPoint = myHp.getAttackPoint();
@@ -365,7 +364,7 @@ public class Field_ArenaController {
     return "blockConfirmation.html";
   }
 
-  //防御しない時のメソッド
+  // 防御しない時のメソッド
   @GetMapping("/noBlock")
   public String noBlock(@RequestParam Integer roomid, Model model, Principal prin) {
 
@@ -374,7 +373,7 @@ public class Field_ArenaController {
     int roomsId = roomid;
     Hp myHp = hpMapper.selectMyHp(roomsId, userName);
 
-    //相手の攻撃の強さを取得
+    // 相手の攻撃の強さを取得
     int attackPoint = myHp.getAttackPoint();
 
     hpMapper.updateAttackFalse(roomsId, userName, attackPoint);
@@ -384,7 +383,7 @@ public class Field_ArenaController {
     return "game.html";
   }
 
-  //相手の防御を非同期で待つメソッド
+  // 相手の防御を非同期で待つメソッド
   @GetMapping("blockWait")
   public SseEmitter blockWait(@RequestParam Integer roomid, Principal prin) {
     final SseEmitter emitter = new SseEmitter();
@@ -392,16 +391,16 @@ public class Field_ArenaController {
     return emitter;
   }
 
-  //攻撃終了する際の処理
+  // 攻撃終了する際の処理
   @GetMapping("/attackFin")
-  public String attackFin(@RequestParam Integer roomid, Model model,Principal prin) {
+  public String attackFin(@RequestParam Integer roomid, Model model, Principal prin) {
     String userName = prin.getName();
 
-    //相手のHpを取得
+    // 相手のHpを取得
     Hp enemyHp = hpMapper.selectEnemyHp(roomid, userName);
     int hp = enemyHp.getHp();
-    int attackPoint=enemyHp.getAttackPoint();
-    //相手のHpを減らす
+    int attackPoint = enemyHp.getAttackPoint();
+    // 相手のHpを減らす
     hp -= attackPoint;
     hpMapper.updateEnemyHp(roomid, userName, hp);
     model.addAttribute("attackPoint", attackPoint);

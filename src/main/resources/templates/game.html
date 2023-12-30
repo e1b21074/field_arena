@@ -20,6 +20,10 @@
       position: absolute;
       bottom: 0;
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
   <title>カードゲーム</title>
   <script>
@@ -45,20 +49,23 @@
 
 <body background="img/背景.jpg">
   <div id="myHp">
-    <h2><font color="white"><span sec:authentication="name"></span> のHP : <span th:if="${hp}" th:text="${hp}"></span></font></h2>
+    <h2>
+      <font color="white"><span sec:authentication="name"></span> のHP : <span th:if="${hp}" th:text="${hp}"></span>
+      </font>
+    </h2>
   </div>
   <div id="enemyHp">
     <h2>
       <font color="white">
-      <span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}"
-        th:text="${enemy.hp}"></span>
+        <span th:if="${enemy}" th:text="${enemy.userName}"></span>のHP :<span th:if="${enemy}"
+          th:text="${enemy.hp}"></span>
       </font>
     </h2>
   </div>
 
   <h2 id="turn">
     <font color="white">
-      <nobr th:if="${turns}">[[${turns}]]のターン
+      <nobr th:if="${turns != null && result == null}">[[${turns}]]のターン
         <nobr th:if="${turns==enemy.userName}">
           <nobr class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -68,8 +75,8 @@
     </font>
   </h2>
 
-  <div>
-    <center>
+  <div id="deck">
+    <center th:if="${result == null}">
       <a onclick="drawfunc()">
         <img src="img/山札.png" width="200" height="200">
       </a>
@@ -87,7 +94,12 @@
   <center>
     <div th:if="${result}">
       <font color="white">
-        [[${result}]]
+        <nobr th:if="${result} == 0">
+          <h2>あなたの勝ち！</h2><img src="img/win.png" width="400" height="400">
+        </nobr>
+        <nobr th:if="${result} == 1">
+          <h2>負けた、、、</h2><img src="img/lose.png" width="400" height="400">
+        </nobr>
       </font>
       <button onclick="location.href='/gamearea'">ゲーム終了</button>
     </div>
@@ -95,8 +107,8 @@
 
   <div id="HP"></div>
 
-  <div>
-    <h2>
+  <div id="hand-card">
+    <h2 th:if="${result == null}">
       <nobr th:each="playerhand : ${playerhand}">
         <a th:href="@{/cardUse(id=${playerhand.id},roomid=${roomsId})}">
           <nobr style="text-align: center">
@@ -139,7 +151,6 @@
       var href = "/draw?roomid=";
       window.location.href = href + paramValue;
     }
-
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
