@@ -9,17 +9,16 @@
     window.onload=function(){
       var sse = new EventSource('/start');
         sse.onmessage=function(event){
-          var active_list=JSON.parse(event.data);
-          var active_div="<button onclick=location.href='/game'>ゲーム開始</button>";
-          var div=document.getElementById("game");
-          div.innerHTML=active_div;
+          var game=JSON.parse(event.data);
+          location.href = "/game?roomid=" + game.id;
         }
     }
   </script>
 </head>
 <body>
   <h1>[[${room}]]部屋</h1>
-  <div>
+  <div id="game">
+    <span class="visually-hidden">Loading...</span>
     相手を待っています
   </div>
 </body>
