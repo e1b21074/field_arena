@@ -8,7 +8,6 @@
 </head>
 
 <body background="img/背景.jpg">
-  <font color="white">
   <h2>ユーザー名：<a sec:authentication="name"></a></h2>
   <h2>あなたのHP : <span th:if="${Hp}">[[${Hp}]]</span></h2>
 
@@ -34,7 +33,6 @@
       </nobr>
     </ul>
   </div>
-</font>
 
 
   <!--防御しないボタンを押した際にroomidをパラメータとして渡すためのjavascript-->

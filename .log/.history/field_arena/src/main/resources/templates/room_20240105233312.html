@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カードゲーム</title>
+  <script>
+    window.onload=function(){
+      var sse = new EventSource('/start');
+        sse.onmessage=function(event){
+          var game=JSON.parse(event.data);
+          location.href = "/game?roomid=" + game.id;
+        }
+    }
+  </script>
+</head>
+<body>
+  <h1>[[${room}]]部屋</h1>
+  <div id="game">
+    <span class="visually-hidden">Loading...</span>
+    相手を待っています
+  </div>
+</body>
+</html>

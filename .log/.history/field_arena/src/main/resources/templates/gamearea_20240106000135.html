@@ -23,15 +23,14 @@
 <style>
   .gradient { 
     background:radial-gradient(#fff, #56C500); 
-    height: 950px;
-    border: 1px solid #56C500;
+    height: 1000px;
+    border: 1px solid #333;
 }
 </style>
 
 </head>
 
 <body class="gradient">
-  <center>
   <h1>ようこそ！</h1>
   <h2>ユーザー名：<a sec:authentication="name"></a></h2>
 
@@ -58,7 +57,6 @@
 
 
   <button onclick="location.href='/logout'">ログアウト</button>
-</center>
 </body>
 
 </html>
