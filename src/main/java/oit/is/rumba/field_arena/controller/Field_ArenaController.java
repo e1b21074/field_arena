@@ -126,6 +126,7 @@ public class Field_ArenaController {
     model.addAttribute("room", roomName);
     String userName = prin.getName();
     int roomId = roomMapper.selectIdByUser1Name(userName);
+    userMapper.updateActiveToTrue(userName);
     hpMapper.createHp(roomId, userName);
     return "room.html";
   }
@@ -136,6 +137,7 @@ public class Field_ArenaController {
     asyncFiled_Area.enterRoom(roomid, prin.getName());
     String userName = prin.getName();
     int roomsId = room.getId();
+    userMapper.updateActiveToTrue(userName);
     hpMapper.createHp(roomsId, userName);
     Random rnd = new Random();
     room = roomMapper.selectById(roomsId);
@@ -398,5 +400,12 @@ public class Field_ArenaController {
     model.addAttribute("attackPoint", attackPoint);
     reRoad(roomid, model, prin);
     return "game.html";
+  }
+
+  @GetMapping("/gameend")
+  public String gameend(Principal prin) {
+    String userName = prin.getName();
+    userMapper.updateActiveTofalse(userName);
+    return "gamearea.html";
   }
 }

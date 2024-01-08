@@ -1,5 +1,5 @@
-INSERT INTO userinfo (userName) VALUES ('user1');
-INSERT INTO userinfo (userName) VALUES ('user2');
+INSERT INTO userinfo (userName,isActive) VALUES ('user1',false);
+INSERT INTO userinfo (userName,isActive) VALUES ('user2',false);
 INSERT INTO cards(cardAttribute, cardStrong) VALUES ('武器',1);
 INSERT INTO cards(cardAttribute, cardStrong) VALUES ('武器',2);
 INSERT INTO cards(cardAttribute, cardStrong) VALUES ('武器',3);
@@ -21,4 +21,3 @@ INSERT INTO cards(cardAttribute, cardStrong) VALUES ('回復',2);
 INSERT INTO cards(cardAttribute, cardStrong) VALUES ('回復',3);
 INSERT INTO cards(cardAttribute, cardStrong) VALUES ('回復',4);
 INSERT INTO cards(cardAttribute, cardStrong) VALUES ('回復',5);
-

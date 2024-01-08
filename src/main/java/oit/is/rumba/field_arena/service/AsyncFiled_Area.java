@@ -29,6 +29,9 @@ public class AsyncFiled_Area {
   RoomMapper roomMapper;
 
   @Autowired
+  UserMapper userMapper;
+
+  @Autowired
   HpMapper hpMapper;
 
   @Transactional
@@ -108,15 +111,19 @@ public class AsyncFiled_Area {
     user1Hp = st_hps.get(0).getHp();
     user2Hp = st_hps.get(1).getHp();
     turn = roomMapper.selectTurnsById(roomid);
+    User mine = userMapper.selectUserByName(userName);
 
     try {
       while (true) {
-        System.out.println( userName+" HpAsync OK!");
+        System.out.println(userName + " HpAsync OK!");
         ArrayList<Hp> hps = hpMapper.selectByRoomId(roomid);
         String tmp_turn = roomMapper.selectTurnsById(roomid);
         attackFlag = hpMapper.selectFlag(roomid, userName);
+        mine = userMapper.selectUserByName(userName);
+
         // HPの変動が無ければ少し待ってcontinuで次の繰り返しへ
-        if ((user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) && tmp_turn.equals(turn) && attackFlag==false) {
+        if ((user1Hp == hps.get(0).getHp() && user2Hp == hps.get(1).getHp()) && tmp_turn.equals(turn)
+            && attackFlag == false && mine.isActive()==true) {
           TimeUnit.MILLISECONDS.sleep(500);
           continue;
         }
@@ -129,7 +136,11 @@ public class AsyncFiled_Area {
         // データを送信
         emitter.send(attackFlag);
 
-        TimeUnit.MILLISECONDS.sleep(1000);
+        if (mine.isActive()==true) {
+          TimeUnit.MILLISECONDS.sleep(1000);
+          continue;
+        }
+        break;
       }
     } catch (Exception e) {
       logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());

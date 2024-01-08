@@ -1,6 +1,7 @@
 CREATE TABLE userinfo (
   id IDENTITY,
-  userName VARCHAR NOT NULL
+  userName VARCHAR NOT NULL,
+  isActive BOOLEAN NOT NULL
 );
 
 CREATE TABLE cards(
@@ -25,7 +26,7 @@ CREATE TABLE userHp (
   userName VARCHAR NOT NULL,
   hp INT,
   attackFlag BOOLEAN NOT NULL,
-  attackPoint INT 
+  attackPoint INT
 );
 
 CREATE TABLE playerHand (

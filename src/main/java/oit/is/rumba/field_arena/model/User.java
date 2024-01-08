@@ -3,6 +3,13 @@ package oit.is.rumba.field_arena.model;
 public class User {
   int id;
   String userName;
+  boolean isActive;
+
+
+
+  public User(boolean isActive) {
+    this.isActive = isActive;
+  }
 
   public int getId() {
     return id;
@@ -15,6 +22,12 @@ public class User {
   }
   public void setUserName(String userName) {
     this.userName = userName;
+  }
+  public boolean isActive() {
+    return isActive;
+  }
+  public void setActive(boolean isActive) {
+    this.isActive = isActive;
   }
 
 }
