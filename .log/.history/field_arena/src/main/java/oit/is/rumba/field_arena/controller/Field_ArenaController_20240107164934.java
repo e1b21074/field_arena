@@ -72,6 +72,7 @@ public class Field_ArenaController {
     model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
 
     // HP処理
+    //int roomsId = roomid;// 一旦定数->rommMapperを使用して受け取りたい ←部屋のidをリンクのパラムとして取得した
     String userName = prin.getName();
     // hpMapper.createHp(roomsId, userName);
     Hp hp = hpMapper.selectMyHp(roomid, userName);
@@ -162,6 +163,7 @@ public class Field_ArenaController {
     }
     model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
 
+    // hpMapper.createHp(roomsId, userName);
     Hp hp = hpMapper.selectMyHp(roomsId, userName);
     model.addAttribute("hp", hp.getHp());
     model.addAttribute("roomsId", roomsId);
@@ -193,13 +195,14 @@ public class Field_ArenaController {
       heal(card, roomid, model, prin);
       roomMapper.changeTurns(roomid, Hps.getUserName());
     } else {
+      int roomsId = roomid;
       String userName = prin.getName();
-      Hp myHp = hpMapper.selectMyHp(roomid, userName);
+      Hp myHp = hpMapper.selectMyHp(roomsId, userName);
       model.addAttribute("hp", myHp.getHp());
       model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
-      Hp enemyHp = hpMapper.selectEnemyHp(roomid, userName);
+      Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
       model.addAttribute("enemy", enemyHp);
-      model.addAttribute("roomsId", roomid);
+      model.addAttribute("roomsId", roomsId);
     }
     model.addAttribute("turns", roomMapper.selectTurnsById(roomid));
     return "game.html";
@@ -207,8 +210,9 @@ public class Field_ArenaController {
 
   @GetMapping("/attack")
   public String attack(Card card, int roomid, Model model, Principal prin) {
+    int roomsId = roomid;
     String userName = prin.getName();
-    hpMapper.updateAttackTrue(roomid, userName, card.getCardStrong());
+    hpMapper.updateAttackTrue(roomsId, userName, card.getCardStrong());
     playerHandMapper.deletePlayerHand(playerHandMapper.selecthandnum(userName, card.getId()).get(0).getId());
 
     return "attackWait.html";
@@ -216,32 +220,34 @@ public class Field_ArenaController {
 
   @GetMapping("/heal")
   public String heal(Card card, int roomid, Model model, Principal prin) {
+    int roomsId = roomid;// Integer.parseInt(id);// 一旦定数->rommMapperを使用して受け取りたい
     String userName = prin.getName();
-    Hp myHp = hpMapper.selectMyHp(roomid, userName);
+    Hp myHp = hpMapper.selectMyHp(roomsId, userName);
     myHp.plusHp(card.getCardStrong());
-    hpMapper.updateMyHp(roomid, userName, myHp.getHp());
+    hpMapper.updateMyHp(roomsId, userName, myHp.getHp());
     model.addAttribute("hp", myHp.getHp());
     playerHandMapper.deletePlayerHand(playerHandMapper.selecthandnum(userName, card.getId()).get(0).getId());
     model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
     // 敵のHP
-    Hp enemyHp = hpMapper.selectEnemyHp(roomid, userName);
+    Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
     model.addAttribute("enemy", enemyHp);
-    model.addAttribute("roomsId", roomid);
+    model.addAttribute("roomsId", roomsId);
     return "game.html";
   }
 
   @GetMapping("/block")
   public String block(@RequestParam Integer id, @RequestParam Integer roomid, Model model, Principal prin) {
+    int roomsId = roomid;
     String userName = prin.getName();
     Card card = cardMapper.selectCardById(id);
-    Hp myHp = hpMapper.selectMyHp(roomid, userName);
+    Hp myHp = hpMapper.selectMyHp(roomsId, userName);
     model.addAttribute("hp", myHp.getHp());
     // 選択されたカードを削除する
     playerHandMapper.deletePlayerHand(playerHandMapper.selecthandnum(userName, card.getId()).get(0).getId());
     model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
-    Hp enemyHp = hpMapper.selectEnemyHp(roomid, userName);
+    Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
     model.addAttribute("enemy", enemyHp);
-    model.addAttribute("roomsId", roomid);
+    model.addAttribute("roomsId", roomsId);
 
     // 相手の攻撃の強さを取得
     int attackPoint = myHp.getAttackPoint();
@@ -260,7 +266,7 @@ public class Field_ArenaController {
     myHp.setAttackPoint(attackPoint);
 
     // 防御したことをDBに反映
-    hpMapper.updateAttackFalse(roomid, userName, attackPoint);
+    hpMapper.updateAttackFalse(roomsId, userName, attackPoint);
 
     model.addAttribute("blockPoint", blockPoint);
     model.addAttribute("turns", roomMapper.selectTurnsById(roomid));
@@ -297,12 +303,13 @@ public class Field_ArenaController {
   // リロード用のメソッド
   @GetMapping("/reRoad")
   public String reRoad(@RequestParam Integer roomid, Model model, Principal prin) {
+    int roomsId = roomid;
 
     // ユーザ名の取得
     String userName = prin.getName();
 
     // 自身のHpの取得
-    Hp myHp = hpMapper.selectMyHp(roomid, userName);
+    Hp myHp = hpMapper.selectMyHp(roomsId, userName);
 
     // 自身のHpをthemyselefに登録
     model.addAttribute("hp", myHp.getHp());
@@ -311,13 +318,13 @@ public class Field_ArenaController {
     model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
 
     // 相手のHpの取得
-    Hp enemyHp = hpMapper.selectEnemyHp(roomid, userName);
+    Hp enemyHp = hpMapper.selectEnemyHp(roomsId, userName);
 
     // 相手のHpの登録
     model.addAttribute("enemy", enemyHp);
 
     // roomidの登録
-    model.addAttribute("roomsId", roomid);
+    model.addAttribute("roomsId", roomsId);
 
     // ターンの登録
     model.addAttribute("turns", roomMapper.selectTurnsById(roomid));
@@ -363,12 +370,13 @@ public class Field_ArenaController {
 
     String userName = prin.getName();
 
-    Hp myHp = hpMapper.selectMyHp(roomid, userName);
+    int roomsId = roomid;
+    Hp myHp = hpMapper.selectMyHp(roomsId, userName);
 
     // 相手の攻撃の強さを取得
     int attackPoint = myHp.getAttackPoint();
 
-    hpMapper.updateAttackFalse(roomid, userName, attackPoint);
+    hpMapper.updateAttackFalse(roomsId, userName, attackPoint);
 
     reRoad(roomid, model, prin);
 

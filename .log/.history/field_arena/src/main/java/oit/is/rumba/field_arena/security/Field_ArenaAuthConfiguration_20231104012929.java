@@ -58,14 +58,26 @@ public class Field_ArenaAuthConfiguration {
         .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S").roles("USER").build();
     UserDetails user2 = User.withUsername("user2")
         .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S").roles("USER").build();
-    UserDetails user3 = User.withUsername("user3")
-        .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S").roles("USER").build();
-    UserDetails user4 = User.withUsername("user4")
-        .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S").roles("USER").build();
-    
+    UserDetails admin = User.withUsername("admin")
+        .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S").roles("ADMIN").build();
+    // $ sshrun htpasswd -nbBC 10 customer1 p@ss
+    UserDetails customer1 = User.withUsername("customer1")
+        .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S")
+        .roles("CUSTOMER")
+        .build();
+    // $ sshrun htpasswd -nbBC 10 customer2 p@ss
+    UserDetails customer2 = User.withUsername("customer2")
+        .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S")
+        .roles("CUSTOMER")
+        .build();
+    // $ sshrun htpasswd -nbBC 10 seller p@ss
+    UserDetails seller = User.withUsername("seller")
+        .password("{bcrypt}$2y$10$ngxCDmuVK1TaGchiYQfJ1OAKkd64IH6skGsNw1sLabrTICOHPxC0e")
+        .roles("SELLER")
+        .build();
 
     // 生成したユーザをImMemoryUserDetailsManagerに渡す（いくつでも良い）
-    return new InMemoryUserDetailsManager(user1, user2, user3, user4);
+    return new InMemoryUserDetailsManager(user1, user2, admin, customer1, customer2, seller);
   }
 
 }
