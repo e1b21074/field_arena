@@ -408,4 +408,39 @@ public class Field_ArenaController {
     userMapper.updateActiveTofalse(userName);
     return "gamearea.html";
   }
+
+  @GetMapping("/surrender")
+  public String surrender(@RequestParam Integer roomid, Principal prin, Model model) {
+    // ユーザ名の取得
+    String userName = prin.getName();
+
+    // 自身のHpの取得
+    Hp myHp = hpMapper.selectMyHp(roomid, userName);
+
+    // 自身のHpをthemyselefに登録
+    model.addAttribute("hp", myHp.getHp());
+
+    // 自身の手札の登録
+    model.addAttribute("playerhand", sort(playerHandMapper.selectCardByUserName(prin.getName())));
+
+    // 相手のHpの取得
+    Hp enemyHp = hpMapper.selectEnemyHp(roomid, userName);
+
+    // 相手のHpの登録
+    model.addAttribute("enemy", enemyHp);
+
+    // roomidの登録
+    model.addAttribute("roomsId", roomid);
+
+    // ターンの登録
+    model.addAttribute("turns", roomMapper.selectTurnsById(roomid));
+
+    hpMapper.updateMyHp(roomid, userName, 0);
+
+    // 勝敗
+    HandReset(userName);
+    model.addAttribute("result", "1");
+
+    return "game.html";
+  }
 }

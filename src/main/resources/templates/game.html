@@ -63,6 +63,8 @@
     </h2>
   </div>
 
+  <button onclick="surrender()">降参</button>
+
   <h2 id="turn">
     <font color="white">
       <nobr th:if="${turns != null && result == null}">[[${turns}]]のターン
@@ -150,6 +152,16 @@
       const paramValue = params.get(paramName);
       //パラメータを含めたUrlを生成
       var href = "/draw?roomid=";
+      window.location.href = href + paramValue;
+    }
+
+    function surrender() {
+      //現在のパラメータを取得
+      const params = new URLSearchParams(window.location.search);
+      const paramName = 'roomid';
+      const paramValue = params.get(paramName);
+      //パラメータを含めたUrlを生成
+      var href = "/surrender?roomid=";
       window.location.href = href + paramValue;
     }
   </script>
