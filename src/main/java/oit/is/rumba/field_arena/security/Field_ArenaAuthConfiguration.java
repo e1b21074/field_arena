@@ -29,7 +29,7 @@ public class Field_ArenaAuthConfiguration {
             .logoutSuccessUrl("/")) // ログアウト後に / にリダイレクト
         .authorizeHttpRequests(authz -> authz
             .requestMatchers(AntPathRequestMatcher.antMatcher("/gamearea/**"))
-            .authenticated() 
+            .authenticated()
             .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
             .permitAll())// 上記以外は全員アクセス可能
             .csrf(csrf -> csrf
@@ -62,7 +62,7 @@ public class Field_ArenaAuthConfiguration {
         .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S").roles("USER").build();
     UserDetails user4 = User.withUsername("user4")
         .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S").roles("USER").build();
-    
+
 
     // 生成したユーザをImMemoryUserDetailsManagerに渡す（いくつでも良い）
     return new InMemoryUserDetailsManager(user1, user2, user3, user4);
