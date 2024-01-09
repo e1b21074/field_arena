@@ -44,7 +44,6 @@ public class AsyncFiled_Area {
   public void asyncRoom(SseEmitter emitter) {
     try {
       while (true) {
-        System.out.println("ok");
         if (Room_falg == false) {
           TimeUnit.MILLISECONDS.sleep(500);
           continue;
@@ -78,7 +77,6 @@ public class AsyncFiled_Area {
   public void asyncEnter(SseEmitter emitter) {
     try {
       while (true) {
-        System.out.println("enter ok!");
         if (Room_enter == false) {
           TimeUnit.MILLISECONDS.sleep(500);
           continue;
@@ -115,7 +113,6 @@ public class AsyncFiled_Area {
 
     try {
       while (true) {
-        System.out.println(userName + " HpAsync OK!");
         ArrayList<Hp> hps = hpMapper.selectByRoomId(roomid);
         String tmp_turn = roomMapper.selectTurnsById(roomid);
         attackFlag = hpMapper.selectFlag(roomid, userName);
@@ -158,7 +155,6 @@ public class AsyncFiled_Area {
     String userName = prin.getName();
     try {
       while (true) {
-        System.out.println("Attack Ok!");
         flag = hpMapper.selectAttackFlag(roomid, userName);
         if (flag == true) {
           TimeUnit.MILLISECONDS.sleep(500);

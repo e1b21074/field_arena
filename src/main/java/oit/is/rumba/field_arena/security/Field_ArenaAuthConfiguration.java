@@ -29,7 +29,7 @@ public class Field_ArenaAuthConfiguration {
             .logoutSuccessUrl("/")) // ログアウト後に / にリダイレクト
         .authorizeHttpRequests(authz -> authz
             .requestMatchers(AntPathRequestMatcher.antMatcher("/gamearea/**"))
-            .authenticated() 
+            .authenticated()
             .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
             .permitAll())// 上記以外は全員アクセス可能
             .csrf(csrf -> csrf
@@ -54,15 +54,15 @@ public class Field_ArenaAuthConfiguration {
     // ハッシュ化されたパスワードを得るには，この授業のbashターミナルで下記のように末尾にユーザ名とパスワードを指定すると良い(要VPN)
     // $ sshrun htpasswd -nbBC 10 user1 p@ss
 
-    UserDetails user1 = User.withUsername("user1")
-        .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S").roles("USER").build();
+        UserDetails user1 = User.withUsername("user1")
+        .password("{bcrypt}$2y$10$2mdUCbFUaVGhYbDYSwI1dupfhBXjW3wnKUaBI.EexzRarTLvwgmOa").roles("USER").build();
     UserDetails user2 = User.withUsername("user2")
-        .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S").roles("USER").build();
+        .password("{bcrypt}$2y$10$qIAD8u8dk1LAMvAOb7whouV/nPAhjfy7/BpSuRhWQvvtV2mSiwagm").roles("USER").build();
     UserDetails user3 = User.withUsername("user3")
-        .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S").roles("USER").build();
+        .password("{bcrypt}$2y$10$SlzcryOf5RVnHPtPxkYnou/fYgn.Rag2r7G.bXOQwnuXwchyt6Cli").roles("USER").build();
     UserDetails user4 = User.withUsername("user4")
-        .password("{bcrypt}$2y$10$8pwWOHQTHkwiC0iCSTgAKecdZvxmU6GzDLUml6o035/DERsJYIM/S").roles("USER").build();
-    
+        .password("{bcrypt}$2y$10$RqntzRw0vefqEmG8FXjswejNu26/KMvH9qsW9s0IOeYpsRhawERbi").roles("USER").build();
+
 
     // 生成したユーザをImMemoryUserDetailsManagerに渡す（いくつでも良い）
     return new InMemoryUserDetailsManager(user1, user2, user3, user4);
