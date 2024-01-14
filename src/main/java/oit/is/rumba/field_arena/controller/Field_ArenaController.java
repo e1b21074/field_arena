@@ -405,9 +405,10 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/gameend")
-  public String gameend(Principal prin) {
+  public String gameend(Model model,Principal prin) {
     String userName = prin.getName();
     userMapper.updateActiveTofalse(userName);
+    
     //現在待機中の部屋の取得
     ArrayList<Room> rooms = roomMapper.selectByActive();
 
