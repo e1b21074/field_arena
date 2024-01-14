@@ -41,7 +41,16 @@ public class Field_ArenaController {
   AsyncFiled_Area asyncFiled_Area;
 
   @GetMapping("/gamearea")
-  public String gamearea() {
+  public String gamearea(Model model) {
+
+    //現在待機中の部屋の取得
+    ArrayList<Room> rooms = roomMapper.selectByActive();
+
+    //待機中の部屋があれば登録
+    if (rooms.size()!=0) {
+      model.addAttribute("active_rooms", rooms);
+    }
+
     return "gamearea.html";
   }
 
@@ -49,13 +58,6 @@ public class Field_ArenaController {
   public String loginInfo(ModelMap model, Principal prin) {
     String loginUser = prin.getName();
     model.addAttribute("loginUser", loginUser);
-    return "gamearea.html";
-  }
-
-  @GetMapping("/User")
-  public String User(ModelMap model) {
-    ArrayList<User> users = userMapper.selectAllUsers();
-    model.addAttribute("users", users);
     return "gamearea.html";
   }
 
@@ -403,9 +405,17 @@ public class Field_ArenaController {
   }
 
   @GetMapping("/gameend")
-  public String gameend(Principal prin) {
+  public String gameend(Model model,Principal prin) {
     String userName = prin.getName();
     userMapper.updateActiveTofalse(userName);
+    
+    //現在待機中の部屋の取得
+    ArrayList<Room> rooms = roomMapper.selectByActive();
+
+    //待機中の部屋があれば登録
+    if (rooms.size()!=0) {
+      model.addAttribute("active_rooms", rooms);
+    }
     return "gamearea.html";
   }
 

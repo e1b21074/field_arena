@@ -2,7 +2,6 @@ package oit.is.rumba.field_arena.model;
 
 import java.util.ArrayList;
 
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
