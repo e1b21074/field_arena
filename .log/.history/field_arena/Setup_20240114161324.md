@@ -1,0 +1,155 @@
+## セットアップマニュアル
+
+## 目次
+
+1. [サーバへのアクセス](#サーバへのアクセス)
+    - 1.1 [サーバIPとパスワード](#1-サーバipとパスワード)
+    - 1.2 [サーバへのアクセス手順](#2-サーバへのアクセス手順)
+    - 1.3 [パスワードの入力](#3-パスワードの入力)
+
+2. [Webアプリケーションの実行](#webアプリケーションの実行)
+    - 2.1 [ホームディレクトリへの移動](#1-ホームディレクトリへの移動)
+    - 2.2 [GitHubからリポジトリを取得](#2-githubからリポジトリを取得)
+    - 2.3 [Gradleを利用したWebアプリケーションの実行](#2-gradleを利用したwebアプリケーションの実行)
+    - 2.4 [Webアプリケーションのアクセス](#4-webアプリケーションのアクセス)
+
+---
+
+## サーバへのアクセス
+
+### 1. サーバIPとパスワード
+
+- **IPアドレス:** `150.89.233.206`
+- **パスワード:** `isDev23?206`
+
+   > 注意: サーバは大学内のネットワーク上にあります。接続する際はVPNを利用して接続してください。
+
+### 2. サーバへのアクセス手順
+
+   - `isdev-bash-....exe`を起動し、以下のSSHコマンドでサーバにアクセスします。
+
+     ```bash
+     $ ssh isdev23@150.89.233.206
+     ```
+
+### 3. パスワードの入力
+
+   - パスワードを求められるので、以下のように入力します。
+
+     ```bash
+     isdev23@150.89.233.206's password: isDev23?206
+     ```
+
+     > 注意: パスワードは画面に表示されません。
+
+   - アクセス成功時、以下のようなメッセージが表示されます。
+
+     ```bash
+      user_name@host_name MINGW64 ~
+      $ ssh isdev23@150.89.233.206
+      Warning: Permanently added '150.89.233.206' (ED25519) to the list of known hosts.
+      Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 6.2.0-35-generic x86_64)
+
+      * Documentation:  https://help.ubuntu.com
+      * Management:     https://landscape.canonical.com
+      * Support:        https://ubuntu.com/advantage
+
+        System information as of Fri Oct 27 02:19:11 UTC 2023
+
+        System load:    0.70556640625   Temperature:           53.0 C
+        Usage of /home: unknown         Processes:             27
+        Memory usage:   0%              Users logged in:       0
+        Swap usage:     0%              IPv4 address for eth0: 150.89.233.206
+
+      * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+        just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+        https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+      Expanded Security Maintenance for Applications is not enabled.
+
+      0 updates can be applied immediately.
+
+      Enable ESM Apps to receive additional future security updates.
+      See https://ubuntu.com/esm or run: sudo pro status
+
+      Last login: Fri Oct 27 00:52:53 2023 from XXX.XXX.XXX.XXX
+     ```
+
+## Webアプリケーションの実行
+
+### 1. ホームディレクトリへの移動
+
+   - ホームディレクトリに移動します。
+
+     ```bash
+     $ cd
+     ```
+
+   - 移動後、ホームディレクトリが正しく設定されているかを確認します。
+
+     ```bash
+     $ pwd
+     ```
+
+     以下のように表示されていることを確認します。
+
+     ```
+     isdev23@ubuntu206:~$ pwd
+     /home/isdev23
+     ```
+
+### 2. GitHubからリポジトリを取得
+
+   - リポジトリをクローンします。
+
+     ```bash
+     $ git clone git@github.com:e1b21074/field_arena.git
+     ```
+
+   - リポジトリが正しくクローンされたかを確認するため、`ls` コマンドで確認します。
+
+     ```bash
+     $ ls
+     ```
+
+     以下のような結果が表示されていることを確認します。
+
+     ```
+     isdev23@ubuntu206:~$ ls
+     field_arena
+     ```
+
+   - もしサーバに元々アプリケーションのディレクトリがある場合は、そのディレクトリに移動し以下のコマンドを実行します。
+
+     ```bash
+     $ git pull origin main
+     ```
+
+### 3. Gradleを利用したWebアプリケーションの実行
+
+   - プロジェクトのディレクトリに移動します。
+
+     ```bash
+     $ cd field_arena
+     ```
+
+   - `gradlew`をbashを利用して実行します。
+
+     ```bash
+     $ bash ./gradlew
+     ```
+
+   - アプリケーションを実行するためのコマンドを実行します。
+
+     ```bash
+     $ bash ./gradlew bootrun
+     ```
+
+### 4. Webアプリケーションのアクセス
+
+   - アプリケーションが公開されるため、以下のURLにアクセスできます。
+
+     - URL: [http://150.89.233.206](http://150.89.233.206)
+
+---
